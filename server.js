@@ -1,8 +1,9 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const connectDb = require("./config/ConnectDb");
-const cors = require('cors')
-const body_Parser = require("body-parser")
+const cors = require("cors");
+const body_Parser = require("body-parser");
+const path = require("path");
 
 // load evviroment variable from .envfile
 dotenv.config();
@@ -17,23 +18,25 @@ connectDb();
 app.use(express.json());
 // app.use(body_Parser.json())
 
-app.use(cors())
-
+app.use(cors());
 
 // deifne besic api routes
 app.use("/api/v1/user", require("./Route/UserRoutes"));
 app.use("/api/v1/post", require("./Route/CreatePost"));
 
 
-app.use("/",(req,res)=>{
-  res.send("<h1>insta clone</h1>")
-})
+app.use(express.static(path.join(__dirname, "./client/build")));
 
-// setup prot
-const port = process.env.PORT || 5000;
-
+app.use("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "./client/build/index.html")),
+  function (err) {
+    res.send(err);
+  };
+});
 
 // server is listing on specitfic port
+// setup prot
+const port = process.env.PORT || 5000;
 app.listen(port, () => {
   console.log(`server is running on ${port}`);
 });

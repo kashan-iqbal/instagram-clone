@@ -144,10 +144,9 @@ const unFollowUser = async (req, res) => {
 
 const uploadImage = async (req, res) => {
   const { file } = req.files;
-  console.log(file.path);
+
   try {
     const image = await Cloudnary.uploader.upload(file.path);
-    console.log(image.url,`image url`);
     const user = await USER.findByIdAndUpdate(
       req.user,
       {

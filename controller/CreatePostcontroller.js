@@ -30,7 +30,6 @@ const CreatePost = async (req, res) => {
 
 const allPosts = async (req, res) => {
   let skip = req.query.skip ? parseInt(req.query.skip) : 0;
-  console.log(skip);
   try {
     const allPost = await POST.find()
       .populate("postedBy", "_id userName photo")

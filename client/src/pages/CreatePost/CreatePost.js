@@ -109,14 +109,14 @@ export default function Createpost() {
         {/* details */}
         <div className="details">
           <div className="card-header">
-            <div className="card-pic">
+            {/* <div className="card-pic">
               <img
                 style={{ height: "30px", width: "30px", borderRadius: "50%" }}
                 src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8cGVyc29ufGVufDB8MnwwfHw%3D&auto=format&fit=crop&w=500&q=60"
                 alt=""
               />
             </div>
-            <h5>Ramesh</h5>
+            <h5>Ramesh</h5> */}
           </div>
           <textarea
             value={body}

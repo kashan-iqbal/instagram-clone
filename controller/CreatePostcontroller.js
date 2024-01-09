@@ -30,13 +30,14 @@ const CreatePost = async (req, res) => {
 
 const allPosts = async (req, res) => {
   let skip = req.query.skip ? parseInt(req.query.skip) : 0;
-  console.log( skip);
+  console.log(skip);
   try {
     const allPost = await POST.find()
-      .populate("postedBy", "_id userName")
+      .populate("postedBy", "_id userName photo")
       .skip(skip)
       .limit("10")
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1 })
+  
 
     const count = await POST.countDocuments();
 
@@ -145,7 +146,10 @@ const myFollowing = async (req, res) => {
 
     const followingPost = await POST.find({
       postedBy: { $in: user.following },
-    }).populate("postedBy", "userName _id").populate('comments.postedBy', "userName _id").sort({createdAt: -1})
+    })
+      .populate("postedBy", "userName _id photo")
+      .populate("comments.postedBy", "userName _id")
+      .sort({ createdAt: -1 });
 
     res.send(followingPost);
   } catch (error) {

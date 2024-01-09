@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import logo from "../../assets/figma.png";
 import { Link, useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
@@ -35,7 +35,7 @@ export default function Navbar() {
       return [
         <>
           <Link to="/profile">
-            <li>Profile</li>
+            <li key={3}>Profile</li>
           </Link>
           <Link to="/createPost">Create Post</Link>
           <Link style={{ marginLeft: "20px" }} to="/myfollowing">
@@ -52,10 +52,10 @@ export default function Navbar() {
       return [
         <>
           <Link to="/">
-            <li>SignUp</li>
+            <li key={1}>SignUp</li>
           </Link>
           <Link to="/login">
-            <li>SignIn</li>
+            <li key={2}>SignIn</li>
           </Link>
         </>,
       ];

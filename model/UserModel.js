@@ -14,6 +14,9 @@ const UserSchema = mongoose.Schema({
         type:String,
         require:true
     },
+    photo:{
+      type:String
+    },
     follower:[{type:mongoose.Schema.ObjectId,ref:"USER"}],
     following:[{type:mongoose.Schema.ObjectId,ref:"USER"}]
 },{

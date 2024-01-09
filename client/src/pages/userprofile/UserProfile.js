@@ -3,6 +3,7 @@ import "../Profile/Profile.css";
 import { useParams } from "react-router-dom";
 import Layout from "../../component/Layout";
 import axios from "axios";
+import { Button } from '@mui/material/Button';
 
 export default function UserProfie() {
   var picLink = "https://cdn-icons-png.flaticon.com/128/3177/3177440.png";
@@ -74,13 +75,13 @@ export default function UserProfie() {
 
 
   return (
-    <Layout>
+    <Layout>{user && 
       <div className="profile">
         {/* Profile frame */}
         <div className="profile-frame">
           {/* profile-pic */}
           <div className="profile-pic">
-            <img src={user.Photo ? user.Photo : picLink} alt="" />
+            <img src={user.photo ? user.photo : picLink} alt="" />
           </div>
           {/* profile-data */}
           <div className="pofile-data">
@@ -92,6 +93,8 @@ export default function UserProfie() {
               }}
             >
               <h1>{user.userName}</h1>
+              {
+                  user._id === localStorage.getItem("id")?"":
               <button
                 className="followBtn"
                 onClick={() => {isFollow?
@@ -100,6 +103,7 @@ export default function UserProfie() {
               >
                 {isFollow ? "Unfollow" : "Follow"}
               </button>
+              }
             </div>
             <div className="profile-info" style={{ display: "flex" }}>
               <p>{posts.length} posts</p>
@@ -133,6 +137,7 @@ export default function UserProfie() {
           })}
         </div>
       </div>
+}
     </Layout>
   );
 }

@@ -2,6 +2,7 @@ const USER = require("../model/UserModel");
 const POST = require("../model/Post.Model");
 const bcyrpt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const Cloudnary = require("../config/cloudnary");
 
 const singup = async (req, res) => {
   const { userName, email, password, confirmPassword } = req.body;
@@ -140,6 +141,44 @@ const unFollowUser = async (req, res) => {
     res.send(error);
   }
 };
+
+const uploadImage = async (req, res) => {
+  const { file } = req.files;
+  console.log(file.path);
+  try {
+    const image = await Cloudnary.uploader.upload(file.path);
+    console.log(image.url,`image url`);
+    const user = await USER.findByIdAndUpdate(
+      req.user,
+      {
+        $set: {
+          photo: image.url,
+        },
+      },
+      { new: true }
+    );
+    res.status(201).send(user);
+  } catch (error) {
+    res.send(error);
+  }
+};
+const deleteImage = async(req,res)=>{
+  try {
+    const user = await USER.findByIdAndUpdate(
+      req.user,
+      {
+        $set: {
+          photo: null,
+        },
+      },
+      { new: true }
+    );
+    res.send(user);
+  } catch (error) {
+    res.send(error);
+  }
+
+}
 module.exports = {
   singup,
   singin,
@@ -147,4 +186,6 @@ module.exports = {
   singleUserProfile,
   unFollowUser,
   followUser,
+  uploadImage,
+  deleteImage
 };

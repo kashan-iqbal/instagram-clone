@@ -7,13 +7,14 @@ import PostDetail from "../detail post/DetailPost";
 export default function Profie() {
   const [user, setUser] = useState("");
   const [userPost, setUserPost] = useState("");
-  const [modal ,setModal ]= useState(false)
-  const [detailPost, setDetailPost] = useState("")
+  const [modal, setModal] = useState(false);
+  const [detailPost, setDetailPost] = useState("");
+  const [image, setImage] = useState("");
 
   var picLink = "https://cdn-icons-png.flaticon.com/128/3177/3177440.png";
-  const pic = [];
+  // const pic = [];
   const show = false;
-  const posts = [];
+  // const posts = [];
   const changePic = false;
 
   useEffect(() => {
@@ -30,12 +31,12 @@ export default function Profie() {
 
     const gettingUserPost = async () => {
       try {
-        const {data} = await axios.get("api/v1/post/myposts", {
+        const { data } = await axios.get("api/v1/post/myposts", {
           headers: {
             authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
-        setUserPost(data.data)
+        setUserPost(data.data);
       } catch (error) {
         console.log(error);
       }
@@ -46,34 +47,69 @@ export default function Profie() {
   }, []);
 
   // console.log(userPost,`iam `);
-  
+
   const detailpost = (posts) => {
     setDetailPost(posts);
-    setModal((prev)=>!prev)
+    setModal((prev) => !prev);
   };
 
-  const changeprofile = () => {
-    // Toggle profile change logic
+  const updateProfilePic = async () => {
+    try {
+      const data = new FormData();
+      data.append("file", image);
+
+      const result = await axios.put(`/api/v1/user/upload-image`, data, {
+        headers: {
+          authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log(result);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
+  const deleteProfileImage = async () => {
+    try {
+      const data = new FormData();
+      data.append("file", image);
 
+      const result = await axios.put( `/api/v1/user/delete-image`,null,
+        {
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      console.log(result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <Layout>
-      {modal &&
-        <PostDetail setModal={setModal} post={detailPost}  />
-
-      }
+      {modal && <PostDetail setModal={setModal} post={detailPost} />}
       <div className="profile">
         {/* Profile frame */}
         <div className="profile-frame">
           {/* profile-pic */}
-          <div className="profile-pic">
-            <img
-              onClick={changeprofile}
-              src={user.Photo ? user.Photo : picLink}
-              alt=""
+          <div className="box">
+            <div className="profile-pic">
+              <img src={user.photo ? user.photo : picLink} alt="" />
+            </div>
+            <input
+              type="file"
+              placeholder="profile image"
+              onChange={(e) => setImage(e.target.files[0])}
             />
+            {image === "" ? (
+              ""
+            ) : (
+              <button onClick={updateProfilePic}>update</button>
+            )}
+      
           </div>
           {/* profile-data */}
           <div className="pofile-data">
@@ -83,6 +119,11 @@ export default function Profie() {
               <p>{user.followers ? user.followers.length : "0"} followers</p>
               <p>{user.following ? user.following.length : "0"} following</p>
             </div>
+            {user.photo ? (
+              <button onClick={deleteProfileImage}>delete profile Pic</button>
+            ) : (
+              ""
+            )}  
           </div>
         </div>
         <hr
@@ -94,15 +135,16 @@ export default function Profie() {
         />
         {/* Gallery */}
         <div className="gallery">
-          {userPost && userPost.map((pics) => (
-            <img
-              key={pics._id}
-              src={pics.photo}
-              onClick={()=>detailpost(pics)}
-              className="item"
-              alt=""
-            />
-          ))}
+          {userPost &&
+            userPost.map((pics) => (
+              <img
+                key={pics._id}
+                src={pics.photo}
+                onClick={() => detailpost(pics)}
+                className="item"
+                alt=""
+              />
+            ))}
         </div>
         {show && <div>{/* Render post details UI */}</div>}
         {changePic && <div>{/* Render profile picture change UI */}</div>}

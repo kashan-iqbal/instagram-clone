@@ -98,7 +98,7 @@ const Following = () => {
       console.log(error);
     }
   };
-
+console.log(post);
   return (
     <Layout>
       {post &&
@@ -109,7 +109,7 @@ const Following = () => {
               <div className="card-header">
                 <div className="card-pic">
                   <img
-                    src={posts.postedBy.Photo ? posts.postedBy.Photo : picLink}
+                    src={posts.postedBy.photo ? posts.postedBy.photo : picLink}
                     alt=""
                   />
                 </div>

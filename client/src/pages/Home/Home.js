@@ -78,7 +78,6 @@ export default function Home() {
           authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-
       setPost((prev) => [...prev, ...data.allPost]);
       setPostLenght(data.count);
       console.log(data);
@@ -91,9 +90,8 @@ export default function Home() {
       document.documentElement.clientHeight + window.pageYOffset >=
       document.documentElement.scrollHeight
     ) {
-      // const newSkip = Math.min(postLenght, skip + 2);
-      if (postLenght >= skip || postLenght > skip) {
-        setSkip(skip + 10);
+      if (postLenght >= skip) {
+        setSkip((skip)=> skip + 10);
       }
     }
     return;
@@ -146,7 +144,7 @@ export default function Home() {
                   <div className="card-pic">
                     <img
                       src={
-                        posts.postedBy.Photo ? posts.postedBy.Photo : picLink
+                        posts.postedBy.photo ? posts.postedBy.photo : picLink
                       }
                       alt=""
                     />
@@ -160,7 +158,7 @@ export default function Home() {
               </div>
               {/* card image */}
               <div className="card-image">
-                <img src={posts.photo} alt="" />
+                <img key={post._id} src={posts.photo} alt="" />
               </div>
 
               {/* card content */}

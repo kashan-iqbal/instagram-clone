@@ -90,6 +90,7 @@ export default function Login() {
         horizontal: "center",
         message: data.message,
       });
+      console.log(data)
   if(data.success){
     setLoading(false)
     localStorage.setItem("token",data.token)
@@ -102,7 +103,7 @@ export default function Login() {
         open: true,
         vertical: "top",
         horizontal: "center",
-        message: `Some Thing Went Wrong`
+        message: `Some Thing Went Wrong in frontend`
       });
       setLoading(false);
     }

@@ -35,9 +35,14 @@ const singin = async (req, res) => {
     if (!email || !password) {
       return res.send({ message: "all filed are require" });
     }
+    console.log(email,password);
     const loginUser = await USER.findOne({ email: email });
+    if(!loginUser){
+      return res.send({ message: "not user found"})
+    }
     if (loginUser) {
       const result = await bcyrpt.compare(password, loginUser.password);
+       if(!result){ return res.send({ message: "result not found"})}
       if (result) {
         const token = jwt.sign(
           {
@@ -62,7 +67,7 @@ const singin = async (req, res) => {
     }
   } catch (error) {
     if (error) {
-      res.send({ message: "some thing went wrong " });
+      res.send({ message: "some thing went wrong backend" });
     }
   }
 };

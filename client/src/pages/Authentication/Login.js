@@ -15,7 +15,6 @@ import axios from "axios";
 import { CircularProgress, LinearProgress, Slide } from "@mui/material";
 import Snackbar from "@mui/material/Snackbar";
 
-
 function Copyright(props) {
   return (
     <Typography
@@ -53,9 +52,9 @@ export default function Login() {
   // for toast notification
   const { open, vertical, horizontal, message } = snackBarStatus;
 
-  const TransitionBottom=(props)=>{
- return <Slide {...props} direction="top"/>
-  }
+  const TransitionBottom = (props) => {
+    return <Slide {...props} direction="top" />;
+  };
   const handleClick = (newState) => {
     setSnackBarStatus({ ...newState, open: true });
   };
@@ -64,14 +63,12 @@ export default function Login() {
   };
 
   // Navigate
-  const Navigate =useNavigate()
+  const Navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       setLoading(true);
-      console.log(inputs.email, inputs.password);
-
       // checking emial
       const emailCheck = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 
@@ -90,22 +87,23 @@ export default function Login() {
         horizontal: "center",
         message: data.message,
       });
-      console.log(data)
-  if(data.success){
-    setLoading(false)
-    localStorage.setItem("token",data.token)
-    localStorage.setItem("id",data.id)
-    Navigate("/Home")
-  }
+      console.log(data);
+      if (data.success) {
+        setLoading(false);
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("id", data.id);
+        Navigate("/Home");
+      }
     } catch (error) {
-      console.log(error);
-      setSnackBarStatus({
-        open: true,
-        vertical: "top",
-        horizontal: "center",
-        message: `Some Thing Went Wrong in frontend`
-      });
-      setLoading(false);
+      if (error) {
+        setSnackBarStatus({
+          open: true,
+          vertical: "top",
+          horizontal: "center",
+          message: `Some Thing Went Wrong in frontend`,
+        });
+        setLoading(false);
+      }
     }
   };
 
@@ -119,7 +117,6 @@ export default function Login() {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-
       <Snackbar
         anchorOrigin={{ horizontal, vertical }}
         open={open}
@@ -231,6 +228,5 @@ export default function Login() {
         </Grid>
       </Grid>
     </ThemeProvider>
-
   );
 }

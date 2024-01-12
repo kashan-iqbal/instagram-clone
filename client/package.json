@@ -1,5 +1,6 @@
 {
   "name": "socialappclone",
+  "proxy": "http://localhost:4000/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -16,6 +17,7 @@
     "jsonwebtoken": "^9.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-infinite-scroll-component": "^6.1.0",
     "react-router-dom": "^6.19.0",
     "react-scripts": "5.0.1",
     "styled-components": "^6.1.1",

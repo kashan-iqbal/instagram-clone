@@ -100,7 +100,7 @@ export default function Login() {
           open: true,
           vertical: "top",
           horizontal: "center",
-          message: `Some Thing Went Wrong in frontend`,
+          message: `Some Thing Went Wrong in ${error}`,
         });
         setLoading(false);
       }

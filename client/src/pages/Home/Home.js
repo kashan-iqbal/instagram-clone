@@ -5,6 +5,7 @@ import Layout from "../../component/Layout";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
+import  InfiniteScroll   from "react-infinite-scroll-component"
 
 export default function Home() {
   const [post, setPost] = useState([]);
@@ -13,6 +14,7 @@ export default function Home() {
   const [commentDetai, setCommitDetail] = useState("");
   const [skip, setSkip] = useState(0);
   const [postLenght, setPostLenght] = useState("");
+
   var picLink = "https://cdn-icons-png.flaticon.com/128/3177/3177440.png";
 
   const handleLike = async (id) => {
@@ -65,10 +67,12 @@ export default function Home() {
 
   useEffect(() => {
     getPosts();
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
+    // window.addEventListener("scroll", handleScroll);
+    // window.addEventListener("touchmove",handleScroll)
+    // return () => {
+    //   window.removeEventListener("scroll", handleScroll);
+    // window.removeEventListener("touchmove",handleScroll)
+    // };
   }, [skip]);
 
   const getPosts = async () => {
@@ -85,17 +89,19 @@ export default function Home() {
       console.log(error);
     }
   };
-  const handleScroll = () => {
-    if (
-      document.documentElement.clientHeight + window.pageYOffset >=
-      document.documentElement.scrollHeight
-    ) {
-      if (postLenght >= skip) {
-        setSkip((skip)=> skip + 10);
-      }
-    }
-    return;
-  };
+
+  // const handleScroll = () => {
+  //   const scrollY = window.scrollY || window.pageYOffset;
+  //   if (
+  //     document.documentElement.clientHeight + scrollY >=
+  //     document.documentElement.scrollHeight
+  //   ) {
+  //     if (postLenght >= skip) {
+  //       setSkip((skip) => skip + 10);
+  //     }
+  //   }
+  //   return;
+  // };
 
   const handleCommitSubmit = async (e, id) => {
     e.preventDefault();
@@ -135,6 +141,11 @@ export default function Home() {
     <Layout>
       <div className="home">
         {/* card */}
+        <InfiniteScroll dataLength={post.length}
+        next={()=>setSkip(skip + 10)}
+        hasMore={true}
+        loader={<h2>loading...</h2>}
+        >
         {post &&
           post?.map((posts) => (
             <div className="card" key={posts._id}>
@@ -204,6 +215,8 @@ export default function Home() {
               </div>
             </div>
           ))}
+
+        </InfiniteScroll>
 
         {/* show Comment */}
         {commitModal && (

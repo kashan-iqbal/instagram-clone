@@ -3,6 +3,8 @@ import "./Profile.css";
 import Layout from "../../component/Layout";
 import axios from "axios";
 import PostDetail from "../detail post/DetailPost";
+import ImageList from '@mui/material/ImageList';
+import ImageListItem from '@mui/material/ImageListItem';
 
 export default function Profie() {
   const [user, setUser] = useState("");
@@ -135,16 +137,25 @@ export default function Profie() {
         />
         {/* Gallery */}
         <div className="gallery">
+          <ImageList
+      sx={{ width: 600, height: 450  , }} cols={3} rowHeight={164}
+      className="scrolbar"
+          >
           {userPost &&
             userPost.map((pics) => (
-              <img
-                key={pics._id}
-                src={pics.photo}
-                onClick={() => detailpost(pics)}
-                className="item"
-                alt=""
-              />
+              <ImageListItem key={userPost._id}>
+                <img
+                  key={pics._id}
+                  srcSet={`${pics.photo}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+                  src={`${pics.photo}?w=164&h=164&fit=crop&auto=format`}
+                  alt="net porblem"
+                  loading="lazy"
+                  onClick={() => detailpost(pics)}
+                />
+              </ImageListItem>
             ))}
+
+          </ImageList>
         </div>
         {show && <div>{/* Render post details UI */}</div>}
         {changePic && <div>{/* Render profile picture change UI */}</div>}

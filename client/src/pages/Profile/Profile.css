@@ -75,3 +75,7 @@
   .box{
     display: block;
   }
+
+  .scrolbar::-webkit-scrollbar{
+    display: none;
+  }

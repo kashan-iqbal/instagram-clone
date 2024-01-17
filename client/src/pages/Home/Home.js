@@ -5,12 +5,12 @@ import Layout from "../../component/Layout";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
-import  InfiniteScroll   from "react-infinite-scroll-component"
+import InfiniteScroll from "react-infinite-scroll-component";
 
 export default function Home() {
   const [post, setPost] = useState([]);
   const [commitModal, setCommitModal] = useState(false);
-  const [postCommit, setPostCommit] = useState("");
+  const [postCommit, setPostCommit] = useState([]);
   const [commentDetai, setCommitDetail] = useState("");
   const [skip, setSkip] = useState(0);
   const [postLenght, setPostLenght] = useState("");
@@ -67,12 +67,6 @@ export default function Home() {
 
   useEffect(() => {
     getPosts();
-    // window.addEventListener("scroll", handleScroll);
-    // window.addEventListener("touchmove",handleScroll)
-    // return () => {
-    //   window.removeEventListener("scroll", handleScroll);
-    // window.removeEventListener("touchmove",handleScroll)
-    // };
   }, [skip]);
 
   const getPosts = async () => {
@@ -90,33 +84,30 @@ export default function Home() {
     }
   };
 
-  // const handleScroll = () => {
-  //   const scrollY = window.scrollY || window.pageYOffset;
-  //   if (
-  //     document.documentElement.clientHeight + scrollY >=
-  //     document.documentElement.scrollHeight
-  //   ) {
-  //     if (postLenght >= skip) {
-  //       setSkip((skip) => skip + 10);
-  //     }
-  //   }
-  //   return;
-  // };
-
   const handleCommitSubmit = async (e, id) => {
     e.preventDefault();
-    console.log(id, postCommit);
+    const postingCommit = postCommit;
+    const value = postingCommit[id];
     try {
       const { data } = await axios.put(
         `api/v1/post/commit/${id}`,
-        { postCommit },
+        { value },
         {
           headers: {
             authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         }
       );
+      setPostCommit((prev) => {
+        return {
+          ...prev,
+          [id]: "",
+        };
+      });
       console.log(data);
+      if (data) {
+        setPostCommit("");
+      }
     } catch (error) {
       console.log(error);
     }
@@ -141,81 +132,87 @@ export default function Home() {
     <Layout>
       <div className="home">
         {/* card */}
-        <InfiniteScroll dataLength={post.length}
-        next={()=>setSkip(skip + 10)}
-        hasMore={true}
-        loader={<h2>loading...</h2>}
+        <InfiniteScroll
+          dataLength={post.length}
+          next={() => setSkip(skip + 10)}
+          hasMore={true}
+          loader={<h2>loading...</h2>}
         >
-        {post &&
-          post?.map((posts) => (
-            <div className="card" key={posts._id}>
-              {/* card header */}
-              <Link to={`/userprofile/${posts.postedBy._id}`}>
-                <div className="card-header">
-                  <div className="card-pic">
-                    <img
-                      src={
-                        posts.postedBy.photo ? posts.postedBy.photo : picLink
-                      }
-                      alt=""
-                    />
+          {post &&
+            post?.map((posts) => (
+              <div className="card" key={posts._id}>
+                {/* card header */}
+                <Link to={`/userprofile/${posts.postedBy._id}`}>
+                  <div className="card-header">
+                    <div className="card-pic">
+                      <img
+                        src={
+                          posts.postedBy.photo ? posts.postedBy.photo : picLink
+                        }
+                        alt=""
+                      />
+                    </div>
+                    <h5>{posts.postedBy.userName}</h5>
                   </div>
-                  <h5>{posts.postedBy.userName}</h5>
+                </Link>
+                <hr />
+                <div className="card-body">
+                  <p>{posts.body}</p>
                 </div>
-              </Link>
-              <hr />
-              <div className="card-body">
-                <p>{posts.body}</p>
-              </div>
-              {/* card image */}
-              <div className="card-image">
-                <img key={post._id} src={posts.photo} alt="" />
-              </div>
-
-              {/* card content */}
-              <div className="card-content">
-                <div>
-                  {posts.likes.includes(localStorage.getItem("id")) ? (
-                    <button onClick={() => handleunLike(posts._id)}>
-                      <ThumbUpOffAltIcon
-                        color="primary"
-                        sx={{ fontWeight: "bold", cursor: "pointer" }}
-                      />
-                    </button>
-                  ) : (
-                    <button onClick={() => handleLike(posts._id)}>
-                      <ThumbUpOffAltIcon
-                        sx={{ fontWeight: "bold", cursor: "pointer" }}
-                      />
-                    </button>
-                  )}
-                  <p>{posts.likes.length} Likes</p>
+                {/* card image */}
+                <div className="card-image">
+                  <img key={post._id} src={posts.photo} alt="" />
                 </div>
-                <p
-                  onClick={() => commentDetail(posts._id)}
-                  style={{ fontWeight: "bold", cursor: "pointer" }}
-                >
-                  View all comments
-                </p>
-              </div>
 
-              {/* add Comment */}
-              <div className="add-comment">
-                {/* <span className="material-symbols-outlined">mood</span> */}
-                <form onSubmit={(e) => handleCommitSubmit(e, posts._id)}>
-                  <input
-                    type="text"
-                    placeholder="Add a comment"
-                    onChange={(e) => setPostCommit(e.target.value)}
-                  />
-                  <button className="comment" type="submit">
-                    Post
-                  </button>
-                </form>
-              </div>
-            </div>
-          ))}
+                {/* card content */}
+                <div className="card-content">
+                  <div>
+                    {posts.likes.includes(localStorage.getItem("id")) ? (
+                      <button onClick={() => handleunLike(posts._id)}>
+                        <ThumbUpOffAltIcon
+                          color="primary"
+                          sx={{ fontWeight: "bold", cursor: "pointer" }}
+                        />
+                      </button>
+                    ) : (
+                      <button onClick={() => handleLike(posts._id)}>
+                        <ThumbUpOffAltIcon
+                          sx={{ fontWeight: "bold", cursor: "pointer" }}
+                        />
+                      </button>
+                    )}
+                    <p>{posts.likes.length} Likes</p>
+                  </div>
+                  <p
+                    onClick={() => commentDetail(posts._id)}
+                    style={{ fontWeight: "bold", cursor: "pointer" }}
+                  >
+                    View all comments
+                  </p>
+                </div>
 
+                {/* add Comment */}
+                <div className="add-comment">
+                  {/* <span className="material-symbols-outlined">mood</span> */}
+                  <form onSubmit={(e) => handleCommitSubmit(e, posts._id)}>
+                    <input
+                      type="text"
+                      placeholder="Add a comment"
+                      value={postCommit[posts._id] || ""}
+                      onChange={(e) =>
+                        setPostCommit((prev) => ({
+                          ...prev,
+                          [posts._id]: e.target.value,
+                        }))
+                      }
+                    />
+                    <button className="comment" type="submit">
+                      Post
+                    </button>
+                  </form>
+                </div>
+              </div>
+            ))}
         </InfiniteScroll>
 
         {/* show Comment */}

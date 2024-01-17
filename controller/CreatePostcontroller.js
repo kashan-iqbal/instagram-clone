@@ -99,7 +99,7 @@ const unlikePost = async (req, res) => {
 
 const postCommit = async (req, res) => {
   const commit = {
-    comment: req.body.postCommit,
+    comment: req.body.value,
     postedBy: req.user,
   };
 
@@ -112,7 +112,7 @@ const postCommit = async (req, res) => {
         },
       },
       { new: true }
-    );
+    ).select("-photo");
     res.send({ commentPost });
   } catch (error) {
     res.send({ error });

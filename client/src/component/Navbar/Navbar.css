@@ -46,7 +46,10 @@ a{
 }
 
 
-
+.contianer{
+    width: 100%;
+    position: sticky;
+}
 
 
 

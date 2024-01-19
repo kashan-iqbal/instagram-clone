@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Layout from "../../component/Layout";
 import axios from "axios";
 import "./CreatePost.css";
@@ -8,6 +8,7 @@ export default function Createpost() {
   const [body, setBody] = useState("");
   const [file, setFile] = useState("");
   const [loading, setLoading] = useState(false);
+  const imageref = useRef(null)
   const [snackBarStatus, setSnackBarStatus] = useState({
     open: false,
     vertical: "top",
@@ -67,7 +68,20 @@ export default function Createpost() {
       setLoading(false);
     }
   };
+const handleChange=(e)=>{
+const file = e.target.files[0]
+if(file){
+  const reader = new FileReader()
 
+  reader.onload=(e)=>{
+    if(imageref.current){
+      imageref.current.src = e.target.result
+    }
+  }
+  reader.readAsDataURL(file)
+}
+
+}
   return (
     <Layout>
       <Snackbar
@@ -93,17 +107,13 @@ export default function Createpost() {
         {/* image preview */}
         <div className="main-div">
           <img
-            id="output"
-            src="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-image-512.png"
+            ref={imageref}
             alt=""
+            id="output"
           />
           <input
             type="file"
-            accept="image/*"
-            onChange={(e) => {
-              loadfile(e);
-              setFile(e.target.files[0]);
-            }}
+            onChange={(e)=>handleChange(e)}
           />
         </div>
         {/* details */}

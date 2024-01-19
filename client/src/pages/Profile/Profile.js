@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./Profile.css";
 import Layout from "../../component/Layout";
 import axios from "axios";
 import PostDetail from "../detail post/DetailPost";
-import ImageList from '@mui/material/ImageList';
-import ImageListItem from '@mui/material/ImageListItem';
+import ImageList from "@mui/material/ImageList";
+import ImageListItem from "@mui/material/ImageListItem";
 
 export default function Profie() {
   const [user, setUser] = useState("");
@@ -12,6 +12,7 @@ export default function Profie() {
   const [modal, setModal] = useState(false);
   const [detailPost, setDetailPost] = useState("");
   const [image, setImage] = useState("");
+  const imageRef = useRef();
 
   var picLink = "https://cdn-icons-png.flaticon.com/128/3177/3177440.png";
   // const pic = [];
@@ -77,16 +78,28 @@ export default function Profie() {
       const data = new FormData();
       data.append("file", image);
 
-      const result = await axios.put( `/api/v1/user/delete-image`,null,
-        {
-          headers: {
-            authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
+      const result = await axios.put(`/api/v1/user/delete-image`, null, {
+        headers: {
+          authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
       console.log(result);
     } catch (error) {
       console.log(error);
+    }
+  };
+  const handleChange = (e) => {
+    setImage(e.target.files[0]);
+
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        if (imageRef.current) {
+          imageRef.current.src = e.target.result;
+        }
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -100,18 +113,18 @@ export default function Profie() {
           <div className="box">
             <div className="profile-pic">
               <img src={user.photo ? user.photo : picLink} alt="" />
+              <img ref={imageRef} src={picLink} />
             </div>
             <input
               type="file"
               placeholder="profile image"
-              onChange={(e) => setImage(e.target.files[0])}
+              onChange={(e) => handleChange(e)}
             />
             {image === "" ? (
               ""
             ) : (
               <button onClick={updateProfilePic}>update</button>
             )}
-      
           </div>
           {/* profile-data */}
           <div className="pofile-data">
@@ -125,7 +138,7 @@ export default function Profie() {
               <button onClick={deleteProfileImage}>delete profile Pic</button>
             ) : (
               ""
-            )}  
+            )}
           </div>
         </div>
         <hr
@@ -138,23 +151,24 @@ export default function Profie() {
         {/* Gallery */}
         <div className="gallery">
           <ImageList
-      sx={{ width: 600, height: 450  , }} cols={3} rowHeight={164}
-      className="scrolbar"
+            sx={{ width: 600, height: 450 }}
+            cols={3}
+            rowHeight={164}
+            className="scrolbar"
           >
-          {userPost &&
-            userPost.map((pics) => (
-              <ImageListItem key={userPost._id}>
-                <img
-                  key={pics._id}
-                  srcSet={`${pics.photo}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-                  src={`${pics.photo}?w=164&h=164&fit=crop&auto=format`}
-                  alt="net porblem"
-                  loading="lazy"
-                  onClick={() => detailpost(pics)}
-                />
-              </ImageListItem>
-            ))}
-
+            {userPost &&
+              userPost.map((pics) => (
+                <ImageListItem key={userPost._id}>
+                  <img
+                    key={pics._id}
+                    srcSet={`${pics.photo.image}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+                    src={`${pics.photo.image}?w=164&h=164&fit=crop&auto=format`}
+                    alt="net porblem"
+                    loading="lazy"
+                    onClick={() => detailpost(pics)}
+                  />
+                </ImageListItem>
+              ))}
           </ImageList>
         </div>
         {show && <div>{/* Render post details UI */}</div>}

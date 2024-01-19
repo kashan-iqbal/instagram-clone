@@ -159,6 +159,7 @@ const uploadImage = async (req, res) => {
       {
         $set: {
           photo: image.url,
+          photoId: image.public_id,
         },
       },
       { new: true }
@@ -179,6 +180,8 @@ const deleteImage = async (req, res) => {
       },
       { new: true }
     );
+    const result = await Cloudnary.uploader.destroy(user.photoId);
+    console.log(result);
     res.send(user);
   } catch (error) {
     res.send(error);

@@ -161,7 +161,7 @@ export default function Home() {
                 </div>
                 {/* card image */}
                 <div className="card-image">
-                  <img key={post._id} src={posts.photo} alt="" />
+                  <img key={post._id} src={posts.photo.image} alt="" />
                 </div>
 
                 {/* card content */}

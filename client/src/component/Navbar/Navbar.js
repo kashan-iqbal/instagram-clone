@@ -1,10 +1,13 @@
 import React from "react";
 import logo from "../../assets/figma.png";
 import { Link, useNavigate } from "react-router-dom";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import Modal from "@mui/material/Modal";
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+
 import "./Navbar.css";
 
 export default function Navbar() {
@@ -28,6 +31,7 @@ export default function Navbar() {
   const handleLogout = () => {
     localStorage.removeItem("token");
     Navigate("/login");
+    handleClose()
   };
 
   const uiChange = () => {
@@ -47,7 +51,7 @@ export default function Navbar() {
               Log Out
             </button>
           </Link>
-        </>,
+        </>,  
       ];
     } else {
       return [
@@ -65,35 +69,27 @@ export default function Navbar() {
 
   return (
     <div className="navbar">
-      <Modal
+      <Dialog
         open={open}
         onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
       >
-        <Box sx={style}>
-          <Typography
-            id="modal-modal-title"
-            variant="h6"
-            component="h2"
-            sx={{ mb: "1rem" }}
-          >
-            Are You Want To Sure Logout
-          </Typography>
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "flex-start",
-              justifyContent: "flex-end",
-            }}
-          >
-            <Button onClick={handleClose}>Cancel</Button>
-            <Button color="error" variant="outlined" onClick={handleLogout}>
-              Logout
-            </Button>
-          </Box>
-        </Box>
-      </Modal>
+        <DialogTitle id="alert-dialog-title">
+          {"Warning"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+          By accessing and using our platform, you agree to comply with our Terms of Service. Please review the terms carefully. If you do not agree, kindly refrain from using our services.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleLogout} autoFocus color="error">
+            Logout
+          </Button>
+        </DialogActions>
+      </Dialog>
       <Link to="/home">
         <img src={logo} alt="" style={{ height: "60px", width: "40px" }} />
       </Link>

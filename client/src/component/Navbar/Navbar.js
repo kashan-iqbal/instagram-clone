@@ -9,6 +9,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
 import "./Navbar.css";
+import Search from "../../pages/Search/Search";
 
 export default function Navbar() {
   const [open, setOpen] = React.useState(false);
@@ -41,8 +42,9 @@ export default function Navbar() {
         <>
           <Link to="/profile">
             <li key={3}>Profile</li>
+
           </Link>
-          <Link to="/createPost">Create Post</Link>
+          <Search/>
           <Link style={{ marginLeft: "20px" }} to="/myfollowing">
             My Following
           </Link>

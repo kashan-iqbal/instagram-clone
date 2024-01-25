@@ -1,6 +1,6 @@
 const express = require("express");
 const formidable = require("express-formidable")
-const { CreatePost,allPosts ,myPosts,unlikePost,likePost,postCommit,commitdetail ,deletePost,myFollowing} = require("../controller/CreatePostcontroller");
+const { CreatePost,allPosts ,myPosts,unlikePost,likePost,postCommit,commitdetail ,deletePost,myFollowing,searchApi} = require("../controller/CreatePostcontroller");
 const { validation } = require("../middleware/Validation");
 
 const app = express()
@@ -26,5 +26,7 @@ router.get("/commitdetail/:id",validation,commitdetail)
 router.delete("/delete/:id", validation, deletePost)
 
 router.get("/myfollowing",validation , myFollowing)
+
+router.get("/searching",validation,searchApi)
 
 module.exports = router;

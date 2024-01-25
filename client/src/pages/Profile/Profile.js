@@ -112,8 +112,8 @@ export default function Profie() {
           {/* profile-pic */}
           <div className="box">
             <div className="profile-pic">
-              <img src={user.photo ? user.photo : picLink} alt="" />
-              <img ref={imageRef} src={picLink} />
+              {/* <img src={user.photo ? user.photo : picLink} alt="" /> */}
+              <img ref={imageRef} src={user.photo ? user.photo : picLink } />
             </div>
             <input
               type="file"

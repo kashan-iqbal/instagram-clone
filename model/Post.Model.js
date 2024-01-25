@@ -29,4 +29,6 @@ const PostSchema = mongoose.Schema(
   { timestamps: true }
 );
 
+PostSchema.index({body:"text"})
+
 module.exports = mongoose.model("POST", PostSchema);

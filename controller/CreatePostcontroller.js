@@ -125,7 +125,7 @@ const commitdetail = async (req, res) => {
   try {
     const post = await POST.findById(req.params.id)
       .populate("comments.postedBy", "userName")
-      .populate("postedBy", "userName");
+      .populate("postedBy", "userName", "photo");
     res.send(post);
   } catch (error) {
     res.send(error);
@@ -135,10 +135,10 @@ const commitdetail = async (req, res) => {
 const deletePost = async (req, res) => {
   try {
     const result = await POST.findByIdAndDelete(req.params.id);
-    const imageDelete = await Cloudinay.uploader.destroy(result.photo.imageId)
- if(imageDelete.result === "ok"){
-   res.send({ result, success: true });
- }
+    const imageDelete = await Cloudinay.uploader.destroy(result.photo.imageId);
+    if (imageDelete.result === "ok") {
+      res.send({ result, success: true });
+    }
   } catch (error) {
     res.send({ error, success: false });
   }
@@ -160,6 +160,16 @@ const myFollowing = async (req, res) => {
     res.send(error);
   }
 };
+const searchApi = async (req, res) => {
+  try {
+    const { q } = req.query;
+    console.log(q);
+    const result = await POST.find({ $text: { $search: q ,$caseSensitive : false} });
+    res.send({ success: true, result });
+  } catch (error) {
+    res.send(error);
+  }
+};
 
 module.exports = {
   CreatePost,
@@ -171,4 +181,5 @@ module.exports = {
   commitdetail,
   deletePost,
   myFollowing,
+  searchApi,
 };

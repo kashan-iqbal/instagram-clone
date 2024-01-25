@@ -6,6 +6,19 @@ import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 import InfiniteScroll from "react-infinite-scroll-component";
+import {
+  Backdrop,
+  Box,
+  Button,
+  Dialog,
+  DialogTitle,
+  Fade,
+  Modal,
+  SpeedDial,
+  SpeedDialIcon,
+  Typography,
+} from "@mui/material";
+import Createpost from "../CreatePost/CreatePost";
 
 export default function Home() {
   const [post, setPost] = useState([]);
@@ -14,6 +27,9 @@ export default function Home() {
   const [commentDetai, setCommitDetail] = useState("");
   const [skip, setSkip] = useState(0);
   const [postLenght, setPostLenght] = useState("");
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   var picLink = "https://cdn-icons-png.flaticon.com/128/3177/3177440.png";
 
@@ -88,6 +104,7 @@ export default function Home() {
     e.preventDefault();
     const postingCommit = postCommit;
     const value = postingCommit[id];
+
     try {
       const { data } = await axios.put(
         `api/v1/post/commit/${id}`,
@@ -115,7 +132,7 @@ export default function Home() {
 
   const commentDetail = async (id) => {
     try {
-      const { data } = await axios.get(`api/v1/post//commitdetail/${id}`, {
+      const { data } = await axios.get(`api/v1/post/commitdetail/${id}`, {
         headers: {
           authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -126,6 +143,17 @@ export default function Home() {
     } catch (error) {
       console.log(error);
     }
+  };
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
   };
 
   return (
@@ -221,7 +249,7 @@ export default function Home() {
             <div className="container">
               <div className="postPic">
                 <img
-                  src={commentDetai.photo ? commentDetai.photo : picLink}
+                  src={commentDetai.photo ? commentDetai.photo.image : picLink}
                   alt=""
                 />
               </div>
@@ -274,6 +302,13 @@ export default function Home() {
             </div>
           </div>
         )}
+        <SpeedDial
+          ariaLabel="SpeedDial basic example"
+          sx={{ position: "fixed", bottom: 40, right: 16 }}
+          icon={<SpeedDialIcon />}
+          onClick={handleOpen}
+        ></SpeedDial>
+        <Createpost asOpen={open} closeHandle={handleClose} />
       </div>
     </Layout>
   );

@@ -14,6 +14,15 @@ const Following = () => {
   const [commentDetai, setCommitDetail] = useState("");
   var picLink = "https://cdn-icons-png.flaticon.com/128/3177/3177440.png";
 
+  const LinkStyle = {
+    mr: 2,
+    display: { xs: "none", md: "flex" },
+    fontFamily: "monospace",
+    fontWeight: 700,
+    letterSpacing: ".3rem",
+    color: "inherit",
+    textDecoration: "none",
+  };
   const getFollowingData = async () => {
     try {
       const { data } = await axios.get(`api/v1/post/myfollowing`, {
@@ -105,7 +114,7 @@ console.log(post);
         post?.map((posts) => (
           <div className="card" key={posts._id}>
             {/* card header */}
-            <Link to={`/userprofile/${posts.postedBy._id}`}>
+            <Link style={LinkStyle} to={`/userprofile/${posts.postedBy._id}`}>
               <div className="card-header">
                 <div className="card-pic">
                   <img
@@ -122,7 +131,7 @@ console.log(post);
             </div>
             {/* card image */}
             <div className="card-image">
-              <img src={posts.photo} alt="" />
+              <img src={posts.photo.image} alt="" />
             </div>
 
             {/* card content */}

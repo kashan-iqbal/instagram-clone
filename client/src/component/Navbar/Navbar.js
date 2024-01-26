@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "../../assets/figma.png";
+import logo from "../../assets/social-high-resolution-logo (1).png";
 import { Link, useNavigate } from "react-router-dom";
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -16,17 +16,7 @@ export default function Navbar() {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 400,
-    bgcolor: "background.paper",
-    border: "2px solid #000",
-    boxShadow: 24,
-    p: 4,
-  };
+  
   
   const Navigate = useNavigate();
   const handleLogout = () => {
@@ -93,7 +83,7 @@ export default function Navbar() {
         </DialogActions>
       </Dialog>
       <Link to="/home">
-        <img src={logo} alt="" style={{ height: "60px", width: "40px" }} />
+        <img src={logo} alt="" style={{ height: "70px", width: "110px",padding:"0" }} />
       </Link>
       <ul className="nav-menu">{uiChange()}</ul>
     </div>

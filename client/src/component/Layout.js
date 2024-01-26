@@ -1,11 +1,12 @@
 import React from "react";
-import Navbar from "./Navbar/Navbar";
+// import Navbar from "./Navbar/Navbar";
+import ResponsiveAppBar from "./Navbar/Appbar";
 
 
 const Layout = ({ children }) => {
   return (
     <>
-      < Navbar/>
+      < ResponsiveAppBar/>
       {children}
     </>
   );

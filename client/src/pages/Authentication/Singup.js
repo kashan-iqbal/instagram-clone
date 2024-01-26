@@ -54,7 +54,7 @@ export default function SingUp() {
   const {open,vertical,horizontal, message} = snackBarStatus
 
   const TransitionBottom=(props)=>{
-    return <Slide {...props} direction="top"/>
+    return <Slide {...props} direction="up"/>
      }
      const handleClick = (newState) => {
        setSnackBarStatus({ ...newState, open: true });
@@ -202,7 +202,7 @@ export default function SingUp() {
                 margin="normal"
                 required
                 fullWidth
-                id="email"
+                id="password2"
                 label="Password"
                 name="password"
                 autoComplete="password"

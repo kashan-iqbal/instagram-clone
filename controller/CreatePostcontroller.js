@@ -124,8 +124,8 @@ const postCommit = async (req, res) => {
 const commitdetail = async (req, res) => {
   try {
     const post = await POST.findById(req.params.id)
-      .populate("comments.postedBy", "userName")
-      .populate("postedBy", "userName", "photo");
+      .populate("comments.postedBy", "userName photo")
+      .populate("postedBy", "userName photo");
     res.send(post);
   } catch (error) {
     res.send(error);
@@ -163,8 +163,7 @@ const myFollowing = async (req, res) => {
 const searchApi = async (req, res) => {
   try {
     const { q } = req.query;
-    console.log(q);
-    const result = await POST.find({ $text: { $search: q ,$caseSensitive : false} });
+    const result = await POST.find({ $text: { $search: q ,$caseSensitive : false} }).populate("postedBy","userName photo");
     res.send({ success: true, result });
   } catch (error) {
     res.send(error);

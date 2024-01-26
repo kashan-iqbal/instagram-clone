@@ -10,6 +10,7 @@ import {
   Backdrop,
   Box,
   Button,
+  CircularProgress,
   Dialog,
   DialogTitle,
   Fade,
@@ -156,6 +157,7 @@ export default function Home() {
     p: 4,
   };
 
+  console.log(commentDetai);
   return (
     <Layout>
       <div className="home">
@@ -164,13 +166,13 @@ export default function Home() {
           dataLength={post.length}
           next={() => setSkip(skip + 10)}
           hasMore={true}
-          loader={<h2>loading...</h2>}
+          loader={<CircularProgress color="primary" sx={{width:"100%",ml:"40%"}}/>}
         >
           {post &&
             post?.map((posts) => (
               <div className="card" key={posts._id}>
                 {/* card header */}
-                <Link to={`/userprofile/${posts.postedBy._id}`}>
+                <Link to={`/userprofile/${posts.postedBy._id}`} style={{textDecoration:"none",color:"black"}}>
                   <div className="card-header">
                     <div className="card-pic">
                       <img
@@ -262,7 +264,7 @@ export default function Home() {
                   <div className="card-pic">
                     <img src={picLink} alt="" />
                   </div>
-                  <h5>{commentDetai && commentDetai.postedBy.userName}</h5>
+                  <h5>{commentDetai && commentDetai.postedBy?.userName}</h5>
                 </div>
 
                 {/* commentSection */}
@@ -272,7 +274,7 @@ export default function Home() {
                 >
                   {/* Dummy comments */}
                   {commentDetai &&
-                    commentDetai.comments.map((comt) => (
+                    commentDetai.comments?.map((comt) => (
                       <p className="comm">
                         <span
                           className="commenter"

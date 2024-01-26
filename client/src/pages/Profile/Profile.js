@@ -128,11 +128,15 @@ export default function Profie() {
           </div>
           {/* profile-data */}
           <div className="pofile-data">
-            <h1>{user.userName}</h1>
-            <div className="profile-info" style={{ display: "flex" }}>
-              <p>{userPost ? userPost.length : "0"} posts</p>
-              <p>{user.followers ? user.followers.length : "0"} followers</p>
-              <p>{user.following ? user.following.length : "0"} following</p>
+            <div className="profile-info" style={{ display: "block" }}>
+              <div className="userName">
+            <p >{user.userName}</p>
+              </div>
+              <div style={{display:"flex" ,justifyContent:"space-around", maxWidth:"600px"}}>
+              <p>posts {userPost ? userPost.length : "0"} </p>
+              <p>followers {user.followers ? user.followers.length : "0"} </p>
+              <p>following {user.following ? user.following.length : "0"} </p>
+              </div>
             </div>
             {user.photo ? (
               <button onClick={deleteProfileImage}>delete profile Pic</button>

@@ -21,6 +21,7 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@mui/material";
+import Search from "../../pages/Search/Search";
 
 const pages = ["My following", "searchIcon"];
 // const settings = ['Profile', 'Logout'];
@@ -92,7 +93,6 @@ function ResponsiveAppBar() {
                 />
               </Link>
             </Typography>
-
             <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
               <IconButton
                 size="large"
@@ -123,11 +123,12 @@ function ResponsiveAppBar() {
                 }}
               >
                 <MenuItem>
-                  <Typography textAlign="center">
+                  <Typography  display="block">
                     {" "}
                     <Link to="/myfollowing" style={LinkStyle}>
                       My Following{" "}
                     </Link>
+                    <Search/>
                   </Typography>
                 </MenuItem>
               </Menu>
@@ -164,6 +165,7 @@ function ResponsiveAppBar() {
                   My following
                 </Link>
               </Button>
+              <Search/>
             </Box>
 
             <Box sx={{ flexGrow: 0 }}>

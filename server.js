@@ -25,14 +25,14 @@ app.use("/api/v1/user", require("./Route/UserRoutes"));
 app.use("/api/v1/post", require("./Route/CreatePost"));
 
 
-// app.use(express.static(path.join(__dirname, "./client/build")));
+app.use(express.static(path.join(__dirname, "./client/build")));
 
-// app.use("*", (req, res) => {
-//   res.sendFile(path.join(__dirname, "./client/build/index.html")),
-//   function (err) {
-//     res.send(err);
-//   };
-// });
+app.use("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "./client/build/index.html")),
+  function (err) {
+    res.send(err);
+  };
+});
 
 // server is listing on specitfic port
 // setup prot

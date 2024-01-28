@@ -13,7 +13,10 @@ const CreatePost = async (req, res) => {
     const imageUrl = await Cloudinay.uploader.upload(file.path);
     const savePost = new POST({
       body,
-      photo: imageUrl.url,
+      photo: {
+        image: imageUrl.url,
+        imageId: imageUrl.public_id,
+      },
       postedBy: userPostCreate,
     });
     const result = await savePost.save();
@@ -35,8 +38,7 @@ const allPosts = async (req, res) => {
       .populate("postedBy", "_id userName photo")
       .skip(skip)
       .limit("10")
-      .sort({ createdAt: -1 })
-  
+      .sort({ createdAt: -1 });
 
     const count = await POST.countDocuments();
 
@@ -99,7 +101,7 @@ const unlikePost = async (req, res) => {
 
 const postCommit = async (req, res) => {
   const commit = {
-    comment: req.body.postCommit,
+    comment: req.body.value,
     postedBy: req.user,
   };
 
@@ -112,7 +114,7 @@ const postCommit = async (req, res) => {
         },
       },
       { new: true }
-    );
+    ).select("-photo");
     res.send({ commentPost });
   } catch (error) {
     res.send({ error });
@@ -122,8 +124,8 @@ const postCommit = async (req, res) => {
 const commitdetail = async (req, res) => {
   try {
     const post = await POST.findById(req.params.id)
-      .populate("comments.postedBy", "userName")
-      .populate("postedBy", "userName");
+      .populate("comments.postedBy", "userName photo")
+      .populate("postedBy", "userName photo");
     res.send(post);
   } catch (error) {
     res.send(error);
@@ -133,7 +135,10 @@ const commitdetail = async (req, res) => {
 const deletePost = async (req, res) => {
   try {
     const result = await POST.findByIdAndDelete(req.params.id);
-    res.send({ result, success: true });
+    const imageDelete = await Cloudinay.uploader.destroy(result.photo.imageId);
+    if (imageDelete.result === "ok") {
+      res.send({ result, success: true });
+    }
   } catch (error) {
     res.send({ error, success: false });
   }
@@ -155,6 +160,15 @@ const myFollowing = async (req, res) => {
     res.send(error);
   }
 };
+const searchApi = async (req, res) => {
+  try {
+    const { q } = req.query;
+    const result = await POST.find({ $text: { $search: q ,$caseSensitive : false} }).populate("postedBy","userName photo");
+    res.send({ success: true, result });
+  } catch (error) {
+    res.send(error);
+  }
+};
 
 module.exports = {
   CreatePost,
@@ -166,4 +180,5 @@ module.exports = {
   commitdetail,
   deletePost,
   myFollowing,
+  searchApi,
 };

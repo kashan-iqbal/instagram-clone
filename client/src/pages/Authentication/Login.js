@@ -14,6 +14,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { CircularProgress, LinearProgress, Slide } from "@mui/material";
 import Snackbar from "@mui/material/Snackbar";
+import SnackBar from "../../Hoc/SnackBar";
 
 function Copyright(props) {
   return (
@@ -41,27 +42,8 @@ export default function Login() {
     email: "",
     password: "",
   });
-  const [loading, setLoading] = useState(false);
-  const [snackBarStatus, setSnackBarStatus] = useState({
-    open: false,
-    vertical: "top",
-    horizontal: "center",
-    message: "",
-  });
-
-  // for toast notification
-  const { open, vertical, horizontal, message } = snackBarStatus;
-
-  const TransitionBottom = (props) => {
-    return <Slide {...props} direction="top" />;
-  };
-  const handleClick = (newState) => {
-    setSnackBarStatus({ ...newState, open: true });
-  };
-  const handleClose = () => {
-    setSnackBarStatus({ ...snackBarStatus, open: false });
-  };
-
+  const [message,setMessage] = useState({text:"",onOpen:false,onClose:true})
+  const [loading,setLoading] = useState(false)
   // Navigate
   const Navigate = useNavigate();
 
@@ -81,13 +63,7 @@ export default function Login() {
         password: inputs.password,
       });
       setLoading(false);
-      setSnackBarStatus({
-        open: true,
-        vertical: "top",
-        horizontal: "center",
-        message: data.message,
-      });
-      console.log(data);
+      setMessage({text:data.message,onOpen:true})
       if (data.success) {
         setLoading(false);
         localStorage.setItem("token", data.token);
@@ -96,12 +72,7 @@ export default function Login() {
       }
     } catch (error) {
       if (error) {
-        setSnackBarStatus({
-          open: true,
-          vertical: "top",
-          horizontal: "center",
-          message: `Some Thing Went Wrong in frontend`,
-        });
+        setMessage({text:error,onOpen:true})
         setLoading(false);
       }
     }
@@ -114,10 +85,13 @@ export default function Login() {
       [name]: value,
     }));
   };
-
+const{onOpen} =  message
+const handleClose=()=>{
+  setMessage({...message,onOpen:false})
+}
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Snackbar
+      {/* <Snackbar
         anchorOrigin={{ horizontal, vertical }}
         open={open}
         onClose={handleClose}
@@ -125,7 +99,8 @@ export default function Login() {
         key={vertical + horizontal}
         autoHideDuration={2000}
         TransitionComponent={TransitionBottom}
-      />
+      /> */}
+      <SnackBar onOpen={onOpen} handleClose={handleClose}>{message.text}</SnackBar>
       {loading ? <LinearProgress /> : ""}
       <Grid container component="main" sx={{ height: "100vh" }}>
         <CssBaseline />
@@ -152,7 +127,7 @@ export default function Login() {
               mx: 4,
               display: "flex",
               flexDirection: "column",
-              alignItems: "center",
+              alignItems: "center"
             }}
           >
             <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>

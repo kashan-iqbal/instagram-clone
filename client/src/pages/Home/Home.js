@@ -5,14 +5,33 @@ import Layout from "../../component/Layout";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
+import InfiniteScroll from "react-infinite-scroll-component";
+import {
+  Backdrop,
+  Box,
+  Button,
+  CircularProgress,
+  Dialog,
+  DialogTitle,
+  Fade,
+  Modal,
+  SpeedDial,
+  SpeedDialIcon,
+  Typography,
+} from "@mui/material";
+import Createpost from "../CreatePost/CreatePost";
 
 export default function Home() {
   const [post, setPost] = useState([]);
   const [commitModal, setCommitModal] = useState(false);
-  const [postCommit, setPostCommit] = useState("");
+  const [postCommit, setPostCommit] = useState([]);
   const [commentDetai, setCommitDetail] = useState("");
   const [skip, setSkip] = useState(0);
   const [postLenght, setPostLenght] = useState("");
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   var picLink = "https://cdn-icons-png.flaticon.com/128/3177/3177440.png";
 
   const handleLike = async (id) => {
@@ -65,10 +84,6 @@ export default function Home() {
 
   useEffect(() => {
     getPosts();
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
   }, [skip]);
 
   const getPosts = async () => {
@@ -85,32 +100,32 @@ export default function Home() {
       console.log(error);
     }
   };
-  const handleScroll = () => {
-    if (
-      document.documentElement.clientHeight + window.pageYOffset >=
-      document.documentElement.scrollHeight
-    ) {
-      if (postLenght >= skip) {
-        setSkip((skip)=> skip + 10);
-      }
-    }
-    return;
-  };
 
   const handleCommitSubmit = async (e, id) => {
     e.preventDefault();
-    console.log(id, postCommit);
+    const postingCommit = postCommit;
+    const value = postingCommit[id];
+
     try {
       const { data } = await axios.put(
         `api/v1/post/commit/${id}`,
-        { postCommit },
+        { value },
         {
           headers: {
             authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         }
       );
+      setPostCommit((prev) => {
+        return {
+          ...prev,
+          [id]: "",
+        };
+      });
       console.log(data);
+      if (data) {
+        setPostCommit("");
+      }
     } catch (error) {
       console.log(error);
     }
@@ -118,7 +133,7 @@ export default function Home() {
 
   const commentDetail = async (id) => {
     try {
-      const { data } = await axios.get(`api/v1/post//commitdetail/${id}`, {
+      const { data } = await axios.get(`api/v1/post/commitdetail/${id}`, {
         headers: {
           authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -130,80 +145,106 @@ export default function Home() {
       console.log(error);
     }
   };
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+  };
 
+  console.log(commentDetai);
   return (
     <Layout>
       <div className="home">
         {/* card */}
-        {post &&
-          post?.map((posts) => (
-            <div className="card" key={posts._id}>
-              {/* card header */}
-              <Link to={`/userprofile/${posts.postedBy._id}`}>
-                <div className="card-header">
-                  <div className="card-pic">
-                    <img
-                      src={
-                        posts.postedBy.photo ? posts.postedBy.photo : picLink
-                      }
-                      alt=""
-                    />
+        <InfiniteScroll
+          dataLength={post.length}
+          next={() => setSkip(skip + 10)}
+          hasMore={true}
+          loader={<CircularProgress color="primary" sx={{width:"100%",ml:"40%"}}/>}
+          style={{overflow:"hidden"}}
+        >
+          {post &&
+            post?.map((posts) => (
+              <div className="card" key={posts._id}>
+                {/* card header */}
+                <Link to={`/userprofile/${posts.postedBy._id}`} style={{textDecoration:"none",color:"black"}}>
+                  <div className="card-header">
+                    <div className="card-pic">
+                      <img
+                        src={
+                          posts.postedBy.photo ? posts.postedBy.photo : picLink
+                        }
+                        alt=""
+                      />
+                    </div>
+                    <h5>{posts.postedBy.userName}</h5>
                   </div>
-                  <h5>{posts.postedBy.userName}</h5>
+                </Link>
+                <hr />
+                <div className="card-body">
+                  <p>{posts.body}</p>
                 </div>
-              </Link>
-              <hr />
-              <div className="card-body">
-                <p>{posts.body}</p>
-              </div>
-              {/* card image */}
-              <div className="card-image">
-                <img key={post._id} src={posts.photo} alt="" />
-              </div>
-
-              {/* card content */}
-              <div className="card-content">
-                <div>
-                  {posts.likes.includes(localStorage.getItem("id")) ? (
-                    <button onClick={() => handleunLike(posts._id)}>
-                      <ThumbUpOffAltIcon
-                        color="primary"
-                        sx={{ fontWeight: "bold", cursor: "pointer" }}
-                      />
-                    </button>
-                  ) : (
-                    <button onClick={() => handleLike(posts._id)}>
-                      <ThumbUpOffAltIcon
-                        sx={{ fontWeight: "bold", cursor: "pointer" }}
-                      />
-                    </button>
-                  )}
-                  <p>{posts.likes.length} Likes</p>
+                {/* card image */}
+                <div className="card-image">
+                  <img key={post._id} src={posts.photo.image} alt="" />
                 </div>
-                <p
-                  onClick={() => commentDetail(posts._id)}
-                  style={{ fontWeight: "bold", cursor: "pointer" }}
-                >
-                  View all comments
-                </p>
-              </div>
 
-              {/* add Comment */}
-              <div className="add-comment">
-                {/* <span className="material-symbols-outlined">mood</span> */}
-                <form onSubmit={(e) => handleCommitSubmit(e, posts._id)}>
-                  <input
-                    type="text"
-                    placeholder="Add a comment"
-                    onChange={(e) => setPostCommit(e.target.value)}
-                  />
-                  <button className="comment" type="submit">
-                    Post
-                  </button>
-                </form>
+                {/* card content */}
+                <div className="card-content">
+                  <div>
+                    {posts.likes.includes(localStorage.getItem("id")) ? (
+                      <button onClick={() => handleunLike(posts._id)}>
+                        <ThumbUpOffAltIcon
+                          color="primary"
+                          sx={{ fontWeight: "bold", cursor: "pointer" }}
+                        />
+                      </button>
+                    ) : (
+                      <button onClick={() => handleLike(posts._id)}>
+                        <ThumbUpOffAltIcon
+                          sx={{ fontWeight: "bold", cursor: "pointer" }}
+                        />
+                      </button>
+                    )}
+                    <p>{posts.likes.length} Likes</p>
+                  </div>
+                  <p
+                    onClick={() => commentDetail(posts._id)}
+                    style={{ fontWeight: "bold", cursor: "pointer" }}
+                  >
+                    View all comments
+                  </p>
+                </div>
+
+                {/* add Comment */}
+                <div className="add-comment">
+                  {/* <span className="material-symbols-outlined">mood</span> */}
+                  <form onSubmit={(e) => handleCommitSubmit(e, posts._id)}>
+                    <input
+                      type="text"
+                      placeholder="Add a comment"
+                      value={postCommit[posts._id] || ""}
+                      onChange={(e) =>
+                        setPostCommit((prev) => ({
+                          ...prev,
+                          [posts._id]: e.target.value,
+                        }))
+                      }
+                    />
+                    <button className="comment" type="submit">
+                      Post
+                    </button>
+                  </form>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+        </InfiniteScroll>
 
         {/* show Comment */}
         {commitModal && (
@@ -211,7 +252,7 @@ export default function Home() {
             <div className="container">
               <div className="postPic">
                 <img
-                  src={commentDetai.photo ? commentDetai.photo : picLink}
+                  src={commentDetai.photo ? commentDetai.photo.image : picLink}
                   alt=""
                 />
               </div>
@@ -224,7 +265,7 @@ export default function Home() {
                   <div className="card-pic">
                     <img src={picLink} alt="" />
                   </div>
-                  <h5>{commentDetai && commentDetai.postedBy.userName}</h5>
+                  <h5>{commentDetai && commentDetai.postedBy?.userName}</h5>
                 </div>
 
                 {/* commentSection */}
@@ -234,7 +275,7 @@ export default function Home() {
                 >
                   {/* Dummy comments */}
                   {commentDetai &&
-                    commentDetai.comments.map((comt) => (
+                    commentDetai.comments?.map((comt) => (
                       <p className="comm">
                         <span
                           className="commenter"
@@ -264,6 +305,13 @@ export default function Home() {
             </div>
           </div>
         )}
+        <SpeedDial
+          ariaLabel="SpeedDial basic example"
+          sx={{ position: "fixed", bottom: 40, right: 16 }}
+          icon={<SpeedDialIcon />}
+          onClick={handleOpen}
+        ></SpeedDial>
+        <Createpost asOpen={open} closeHandle={handleClose} />
       </div>
     </Layout>
   );

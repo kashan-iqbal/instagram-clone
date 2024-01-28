@@ -1,13 +1,15 @@
 .createPost{
     max-width: 500px;
-    margin: 10px auto;
+    max-height: 700px;
+    margin: 10px 8px;
     border: 1px solid rgb(173, 173, 173);
     border-radius: 5px;
 }
 
 .main-div{
     border-top: 1px solid rgb(173, 173, 173) ;
-    
+    /* height: 80%;
+    width: 60%; */
     display: block;
     align-items: center;
     justify-content: center;
@@ -27,7 +29,13 @@
     font-weight: bolder;
     cursor: pointer;
 }
-
+input{
+    border: none;
+    color: #339ce3;
+    background:none;
+    font-weight: bolder;
+    cursor: pointer;
+}
 .details{
     border-top: 1px solid rgb(173, 173, 173) ;
 }
@@ -39,7 +47,8 @@ textarea{
 }
 
 #output{
-    width: 300px;
+    width: 100%;
+    max-height: 300px;
     border: none;
     outline: none;
     margin-top: 5px;

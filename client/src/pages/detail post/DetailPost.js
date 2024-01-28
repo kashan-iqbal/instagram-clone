@@ -29,7 +29,7 @@ export default function PostDetail({ setModal, post }) {
     <div className="showComment">
       <div className="container">
         <div className="postPic">
-          <img src={post.photo} alt="" />
+          <img src={post.photo.image} alt="" />
         </div>
         <div className="details">
           {/* card header */}
@@ -71,7 +71,7 @@ export default function PostDetail({ setModal, post }) {
 
           {/* card content */}
           <div className="card-content">
-            <p>{post.likes.length} Likes</p>
+            <p>{post.likes.length} otp Likes</p>
             <p>{post.body}</p>
           </div>
 

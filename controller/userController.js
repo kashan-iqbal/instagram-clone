@@ -154,11 +154,16 @@ const uploadImage = async (req, res) => {
 
   try {
     const image = await Cloudnary.uploader.upload(file.path);
+    const removePhot = await USER.findById(req.user);
+    if (removePhot.photoId) {
+      const result = await await Cloudnary.uploader.destroy(removePhot.photoId);
+    }
     const user = await USER.findByIdAndUpdate(
       req.user,
       {
         $set: {
           photo: image.url,
+          photoId: image.public_id,
         },
       },
       { new: true }
@@ -179,11 +184,15 @@ const deleteImage = async (req, res) => {
       },
       { new: true }
     );
+    const result = await Cloudnary.uploader.destroy(user.photoId);
+    console.log(result);
     res.send(user);
   } catch (error) {
     res.send(error);
   }
 };
+
+
 module.exports = {
   singup,
   singin,

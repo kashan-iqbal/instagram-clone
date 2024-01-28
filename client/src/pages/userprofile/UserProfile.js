@@ -126,7 +126,7 @@ export default function UserProfie() {
             return (
               <img
                 key={pics._id}
-                src={pics.photo}
+                src={pics.photo.image}
                 alt=""
                 // onClick={() => {
                 //     toggleDetails(pics)

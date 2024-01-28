@@ -5,26 +5,48 @@
   
   .profile-frame {
     display: flex;
-    justify-content: space-evenly;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
   
   .profile-pic {
     height: fit-content;
+    width: fit-content;
+    margin: auto;
   }
   .profile-pic > img {
-    width: 160px;
-    height: 160px;
+    width: 70px;
+    height: 70px;
     object-fit: contain;
     border-radius: 100px;
   }
   
   .profile-data {
-    text-align: left;
+  display: block;
+  align-items: center;
   }
-  .profile-info p {
-    padding: 0px 5px;
+  .profile-data p{
+    width: fit-content;
+    margin: auto;
+
+  }
+  .profile-info p{
+    width: fit-content;
+    margin: auto;
+  }
+  .userName{
+    font-size: larger;
+    margin: 12px 0px 12px 0px;
+    font-weight: 600;
   }
   
+  .user-data{
+    display: flex;
+    justify-content: space-around;
+  }
+
+
   .gallery {
     display: flex;
     flex-wrap: wrap;
@@ -74,4 +96,8 @@
   
   .box{
     display: block;
+  }
+
+  .scrolbar::-webkit-scrollbar{
+    display: none;
   }

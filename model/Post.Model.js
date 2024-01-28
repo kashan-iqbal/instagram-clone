@@ -7,8 +7,12 @@ const PostSchema = mongoose.Schema(
       require: true,
     },
     photo: {
-      type: String,
-      require: true,
+      image: {
+        type: String,
+      },
+      imageId: {
+        type: String,
+      },
     },
     likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "USER" }],
     comments: [
@@ -24,5 +28,7 @@ const PostSchema = mongoose.Schema(
   },
   { timestamps: true }
 );
+
+PostSchema.index({body:"text"})
 
 module.exports = mongoose.model("POST", PostSchema);

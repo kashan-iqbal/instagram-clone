@@ -44,3 +44,16 @@ a{
     transform: translateY(-5px);
     box-shadow: 0 10px 20px -10px rgba(219, 24, 44, 0.6);
 }
+
+
+.contianer{
+    width: 100%;
+    position: sticky;
+}
+
+
+
+
+
+
+

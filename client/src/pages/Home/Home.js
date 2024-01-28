@@ -167,6 +167,7 @@ export default function Home() {
           next={() => setSkip(skip + 10)}
           hasMore={true}
           loader={<CircularProgress color="primary" sx={{width:"100%",ml:"40%"}}/>}
+          style={{overflow:"hidden"}}
         >
           {post &&
             post?.map((posts) => (

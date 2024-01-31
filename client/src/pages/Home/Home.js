@@ -166,14 +166,22 @@ export default function Home() {
           dataLength={post.length}
           next={() => setSkip(skip + 10)}
           hasMore={true}
-          loader={<CircularProgress color="primary" sx={{width:"100%",ml:"40%"}}/>}
-          style={{overflow:"hidden"}}
+          loader={
+            <CircularProgress
+              color="primary"
+              sx={{ width: "100%", ml: "40%" }}
+            />
+          }
+          style={{ overflow: "hidden" }}
         >
           {post &&
             post?.map((posts) => (
               <div className="card" key={posts._id}>
                 {/* card header */}
-                <Link to={`/userprofile/${posts.postedBy._id}`} style={{textDecoration:"none",color:"black"}}>
+                <Link
+                  to={`/userprofile/${posts.postedBy._id}`}
+                  style={{ textDecoration: "none", color: "black" }}
+                >
                   <div className="card-header">
                     <div className="card-pic">
                       <img
@@ -247,64 +255,59 @@ export default function Home() {
         </InfiniteScroll>
 
         {/* show Comment */}
-        {commitModal && (
-          <div className="showComment">
-            <div className="container">
-              <div className="postPic">
-                <img
-                  src={commentDetai.photo ? commentDetai.photo.image : picLink}
-                  alt=""
-                />
-              </div>
-              <div className="details">
-                {/* card header */}
-                <div
-                  className="card-header"
-                  style={{ borderBottom: "1px solid #00000029" }}
-                >
-                  <div className="card-pic">
-                    <img src={picLink} alt="" />
-                  </div>
-                  <h5>{commentDetai && commentDetai.postedBy?.userName}</h5>
-                </div>
-
-                {/* commentSection */}
-                <div
-                  className="comment-section"
-                  style={{ borderBottom: "1px solid #00000029" }}
-                >
-                  {/* Dummy comments */}
-                  {commentDetai &&
-                    commentDetai.comments?.map((comt) => (
-                      <p className="comm">
-                        <span
-                          className="commenter"
-                          style={{ fontWeight: "bolder", marginRight: "5px" }}
-                        >
-                          {comt.postedBy.userName}
-                        </span>
-                        <span className="commentText">{comt.comment}</span>
-                      </p>
-                    ))}
-                </div>
-
-                {/* card content */}
-                <div className="card-content">
-                  <p>{commentDetai.likes?.length} Likes</p>
-                  <p>{commentDetai.body}</p>
-                </div>
-              </div>
-            </div>
-            <div className="close-comment">
-              <span
-                onClick={() => setCommitModal((prev) => !prev)}
-                className="material-symbols-outlined material-symbols-outlined-comment"
-              >
+        <Modal open={commitModal}>
+          <div className="container">
+            <div className="header">
+              <h4>irfan Malik Posts</h4>
+              <p onClick={() => setCommitModal((prev) => !prev)}>
                 <CloseIcon />
-              </span>
+              </p>
+            </div>
+            <hr />
+            <div className="profile_header">
+              <div style={{ display: "flex" }}>
+                <div className="image">
+                  <img
+                    src="./pexels-linkedin-sales-navigator-2182970.jpg"
+                    alt="other"
+                  />
+                </div>
+                <div>
+                  <p>{commentDetai && commentDetai.postedBy?.userName}</p>
+                  <div>time</div>
+                </div>
+              </div>
+              <div>dot</div>
+            </div>
+            <div className="post_body">
+              <p className="padding">{commentDetai.body}</p>
+            </div>
+            <div className="post_img">
+              <img
+                src={commentDetai.photo ? commentDetai.photo.image : picLink}
+                alt="other"
+              />
+            </div>
+
+            <hr />
+            <div className="like_section">
+              <p>Likes {commentDetai.likes?.length} </p>
+              <p>commit 2332</p>
+            </div>
+            <hr />
+
+            <div className="commit_continer">
+              {commentDetai &&
+                commentDetai.comments?.map((comt) => (
+                  <div className="single_commit">
+                    <p>{comt.postedBy.userName}</p>
+                    <p>{comt.comment}</p>
+                  </div>
+                ))}
             </div>
           </div>
-        )}
+        </Modal>
+
         <SpeedDial
           ariaLabel="SpeedDial basic example"
           sx={{ position: "fixed", bottom: 40, right: 16 }}

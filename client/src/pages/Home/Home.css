@@ -86,6 +86,7 @@
 
 .container {
   display: flex;
+  flex-direction: column;
   width: 80%;
   background-color: white;
   position: absolute;
@@ -131,3 +132,109 @@
   font-size: 50px;
   font-variation-settings: "FILL" 0, "wght" 700, "GRAD" 0, "opsz" 48;
 }
+
+
+/* commit modal css */
+
+
+.padding{
+  padding: 0px 10px;
+ }
+ 
+ .container {
+   height: 80vh;
+   margin: 0px 7%;
+   overflow-y: scroll;
+  overflow-x: hidden;
+  border-radius: 18px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+ }
+ 
+ .header {
+   display: flex;
+   align-items: center;
+ }
+ .header h4 {
+   width: fit-content;
+   margin: auto;
+   margin-top: 12px;
+   margin-bottom: 7px;
+ }
+ 
+ .profile_header {
+   display: flex;
+   justify-content: space-between;
+ }
+ 
+ .image img {
+   height: 40px;
+   width: 40px;
+   border-radius: 50%;
+ }
+ 
+ .profile_header p {
+   margin-left: 8px;
+   margin-top: 6px;
+   margin-bottom: 0px;
+   font-weight: 600;
+ }
+ 
+ .profile_header div {
+   margin-left: 8px;
+ }
+ 
+ .post_img img {
+   width: 100%;
+   height: fit-content;
+ }
+ 
+ 
+ .like_section{
+   display: flex;
+   justify-content: space-around;
+ }
+ .like_section p{
+   margin: 0px;
+ }
+ 
+ .single_commit{
+   background-color:#F0F2F5;
+   height: fit-content;
+   width: fit-content;
+   padding: 0px 12px;
+   margin-left:  10px;
+   margin-right: 10px;
+   border-radius: 6px;
+ }
+ 
+ .single_commit p:nth-child(1){
+   margin-bottom: 4px;
+   font-weight: 600;
+   }
+ 
+ .single_commit p:nth-child(2){
+ margin-top: 0px;
+ }
+ 
+ 
+ 
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

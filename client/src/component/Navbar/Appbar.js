@@ -11,7 +11,6 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
 import logo from ".././../assets/social-high-resolution-logo-black-transparent.png";
 import { Link, useNavigate } from "react-router-dom";
 import {
@@ -23,8 +22,6 @@ import {
 } from "@mui/material";
 import Search from "../../pages/Search/Search";
 
-const pages = ["My following", "searchIcon"];
-// const settings = ['Profile', 'Logout'];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -70,12 +67,11 @@ function ResponsiveAppBar() {
       <AppBar position="sticky" sx={{ marginTop: -1, maxWidth: "auto" }}>
         <Container maxWidth="xl">
           <Toolbar disableGutters>
-            {/* <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} /> */}
             <Typography
               variant="h6"
               noWrap
-              component="a"
-              href="#app-bar-with-responsive-menu"
+              // component="a"
+              // href="#app-bar-with-responsive-menu"
               sx={{
                 mr: 2,
                 display: { xs: "none", md: "flex" },
@@ -90,6 +86,7 @@ function ResponsiveAppBar() {
                 <img
                   src={logo}
                   style={{ height: "40px", width: "80px", padding: "0" }}
+                  alt="slow internet"
                 />
               </Link>
             </Typography>
@@ -123,12 +120,12 @@ function ResponsiveAppBar() {
                 }}
               >
                 <MenuItem>
-                  <Typography  display="block">
+                  <Typography display="block">
                     {" "}
                     <Link to="/myfollowing" style={LinkStyle}>
                       My Following{" "}
                     </Link>
-                    <Search/>
+                    <Search />
                   </Typography>
                 </MenuItem>
               </Menu>
@@ -136,8 +133,8 @@ function ResponsiveAppBar() {
             <Typography
               variant="h5"
               noWrap
-              component="a"
-              href="#app-bar-with-responsive-menu"
+              // component="a"
+              // href="#app-bar-with-responsive-menu"
               sx={{
                 mr: 2,
                 display: { xs: "flex", md: "none" },
@@ -153,6 +150,7 @@ function ResponsiveAppBar() {
                 <img
                   src={logo}
                   style={{ height: "40px", width: "80px", padding: "0" }}
+                  alt="slow internet" 
                 />
               </Link>
             </Typography>
@@ -165,7 +163,7 @@ function ResponsiveAppBar() {
                   My following
                 </Link>
               </Button>
-              <Search/>
+              <Search />
             </Box>
 
             <Box sx={{ flexGrow: 0 }}>
@@ -197,7 +195,7 @@ function ResponsiveAppBar() {
                         <Link to={"/profile"} style={LinkStyle}>
                           {" "}
                           Profile
-                        </Link>{" "}
+                        </Link>
                       </Button>
                     </Typography>
                     <Typography textAlign="center" margin={1}>

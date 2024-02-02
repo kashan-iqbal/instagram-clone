@@ -7,18 +7,12 @@ import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 import InfiniteScroll from "react-infinite-scroll-component";
 import {
-  Backdrop,
-  Box,
-  Button,
   CircularProgress,
-  Dialog,
-  DialogTitle,
-  Fade,
   Modal,
   SpeedDial,
   SpeedDialIcon,
-  Typography,
 } from "@mui/material";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Createpost from "../CreatePost/CreatePost";
 
 export default function Home() {
@@ -106,6 +100,10 @@ export default function Home() {
     const postingCommit = postCommit;
     const value = postingCommit[id];
 
+    if (value === "") {
+      return alert("type comment");
+    }
+
     try {
       const { data } = await axios.put(
         `api/v1/post/commit/${id}`,
@@ -144,17 +142,6 @@ export default function Home() {
     } catch (error) {
       console.log(error);
     }
-  };
-  const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 400,
-    bgcolor: "background.paper",
-    border: "2px solid #000",
-    boxShadow: 24,
-    p: 4,
   };
 
   console.log(commentDetai);
@@ -236,6 +223,7 @@ export default function Home() {
                   <form onSubmit={(e) => handleCommitSubmit(e, posts._id)}>
                     <input
                       type="text"
+                      required
                       placeholder="Add a comment"
                       value={postCommit[posts._id] || ""}
                       onChange={(e) =>
@@ -258,17 +246,27 @@ export default function Home() {
         <Modal open={commitModal}>
           <div className="container">
             <div className="header">
-              <h4>irfan Malik Posts</h4>
+              <h4>{commentDetai && commentDetai.postedBy?.userName} Posts</h4>
               <p onClick={() => setCommitModal((prev) => !prev)}>
                 <CloseIcon />
               </p>
             </div>
-            <hr />
+            <hr
+              style={{
+                width: "100%",
+                opacity: "0.8",
+                margin: "0px",
+              }}
+            />
             <div className="profile_header">
               <div style={{ display: "flex" }}>
                 <div className="image">
                   <img
-                    src="./pexels-linkedin-sales-navigator-2182970.jpg"
+                    src={
+                      commentDetai && commentDetai.postedBy.photo
+                        ? commentDetai.postedBy.photo
+                        : picLink
+                    }
                     alt="other"
                   />
                 </div>
@@ -277,7 +275,9 @@ export default function Home() {
                   <div>time</div>
                 </div>
               </div>
-              <div>dot</div>
+              <div>
+                <MoreVertIcon  />
+              </div>
             </div>
             <div className="post_body">
               <p className="padding">{commentDetai.body}</p>
@@ -289,17 +289,29 @@ export default function Home() {
               />
             </div>
 
-            <hr />
+            <hr
+              style={{
+                width: "100%",
+                opacity: "0.8",
+                margin: "5px 0px",
+              }}
+            />
             <div className="like_section">
               <p>Likes {commentDetai.likes?.length} </p>
               <p>commit 2332</p>
             </div>
-            <hr />
+            <hr
+              style={{
+                width: "100%",
+                opacity: "0.8",
+                margin: "10px 0px",
+              }}
+            />
 
             <div className="commit_continer">
               {commentDetai &&
                 commentDetai.comments?.map((comt) => (
-                  <div className="single_commit">
+                  <div className="single_commit" key={comt._id}>
                     <p>{comt.postedBy.userName}</p>
                     <p>{comt.comment}</p>
                   </div>

@@ -3,6 +3,7 @@ const POST = require("../model/Post.Model");
 const bcyrpt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const Cloudnary = require("../config/cloudnary");
+const nodemailer = require("nodemailer");
 
 const singup = async (req, res) => {
   const { userName, email, password, confirmPassword } = req.body;
@@ -192,6 +193,43 @@ const deleteImage = async (req, res) => {
   }
 };
 
+const forget = async (req, res) => {
+  const { email } = req.body;
+  console.log(email);
+  try {
+    const user = await USER.findOne({ email: email });
+    if (!user) {
+      return res.send("user is exist");
+    }
+    const token = jwt.sign({ id: user._id }, process.env.ACCESS_TOKEN, {
+      expiresIn: "1h",
+    });
+
+    const transporter =  nodemailer.createTransport({
+      service: "gmail",
+      secure:false,
+      auth: {
+        user: "kashaniqbal33@gamil.com",
+        pass: "wsyowpafrmwasdkg",
+      },
+    });
+
+    const mailOptions = {
+      from: "kashaniqbal33@gamil.com",
+      to: `${email}`,
+      subject: "Reset Password",
+      text: `http://localhost:3000/forget-Password${user._id}/${token}`,
+    };
+
+    const result = await transporter.sendMail(mailOptions)
+    res.send(result)
+     console.log(`i am result ` ,result);
+
+  } catch (error) {
+    console.log(error);
+
+  }
+};
 
 module.exports = {
   singup,
@@ -202,4 +240,5 @@ module.exports = {
   followUser,
   uploadImage,
   deleteImage,
+  forget,
 };

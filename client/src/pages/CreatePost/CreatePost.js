@@ -3,18 +3,14 @@ import Layout from "../../component/Layout";
 import axios from "axios";
 import "./CreatePost.css";
 import { CircularProgress, Dialog, Snackbar } from "@mui/material";
+import usePositionedSnackbar from "../../hooks/useSnackBarHook";
 
 export default function Createpost({ asOpen, closeHandle }) {
   const [body, setBody] = useState("");
   const [file, setFile] = useState("");
   const [loading, setLoading] = useState(false);
   const imageref = useRef(null);
-  const [snackBarStatus, setSnackBarStatus] = useState({
-    open: false,
-    vertical: "top",
-    horizontal: "center",
-    message: "",
-  });
+
   // For Show Image
   const loadfile = (event) => {
     if (event.target.files.length > 0) {
@@ -27,11 +23,9 @@ export default function Createpost({ asOpen, closeHandle }) {
   };
 
   // snack bar notification
-  const { open, vertical, horizontal, message } = snackBarStatus;
+  const { PositionedSnackbar, showSnackbar } = usePositionedSnackbar();
 
-  const handleClose = () => {
-    setSnackBarStatus({ ...snackBarStatus, open: false });
-  };
+
 
   const submitHandler = async () => {
     setLoading(true);
@@ -39,32 +33,17 @@ export default function Createpost({ asOpen, closeHandle }) {
     console.log(body, file);
     if (!body && !file) {
       setLoading(false);
-      setSnackBarStatus({
-        open: true,
-        vertical: "top",
-        horizontal: "center",
-        message: `All fields Required`,
-      });
+      showSnackbar(`all field are Required`);
       return;
     }
     if (!body) {
       setLoading(false);
-      setSnackBarStatus({
-        open: true,
-        vertical: "top",
-        horizontal: "center",
-        message: `caption is required`,
-      });
+      showSnackbar(`caption is required`);
       return;
     }
     if (!file) {
       setLoading(false);
-      setSnackBarStatus({
-        open: true,
-        vertical: "top",
-        horizontal: "center",
-        message: `upload Image`,
-      });
+      showSnackbar(`upload image`);
       return;
     }
     try {
@@ -83,22 +62,12 @@ export default function Createpost({ asOpen, closeHandle }) {
       imageref.current.src = null;
       setBody("");
       closeHandle();
-      setSnackBarStatus({
-        open: true,
-        vertical: "top",
-        horizontal: "center",
-        message: result.data.message,
-      });
+      showSnackbar(result?.data?.message);
       setLoading(false);
       window.location.reload();
     } catch (error) {
       console.log(error);
-      setSnackBarStatus({
-        open: true,
-        vertical: "top",
-        horizontal: "center",
-        message: `some thing went wrong`,
-      });
+      showSnackbar(`something went wrong`);
       setLoading(false);
     }
   };
@@ -121,14 +90,7 @@ export default function Createpost({ asOpen, closeHandle }) {
   }, [closeHandle]);
   return (
     <>
-      <Snackbar
-        anchorOrigin={{ horizontal, vertical }}
-        open={open}
-        onClose={handleClose}
-        message={message}
-        key={vertical + horizontal}
-        autoHideDuration={2000}
-      />
+      <PositionedSnackbar />
       <Dialog open={asOpen} onClose={closeHandle}>
         <div className="createPost">
           {/* header */}

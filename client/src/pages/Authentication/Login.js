@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -12,9 +12,8 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import image2 from "../../assets/image2.jpg";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { CircularProgress, LinearProgress, Slide } from "@mui/material";
-import Snackbar from "@mui/material/Snackbar";
-import SnackBar from "../../Hoc/SnackBar";
+import { CircularProgress, LinearProgress } from "@mui/material";
+import usePositionedSnackbar from "../../hooks/useSnackBarHook";
 
 function Copyright(props) {
   return (
@@ -42,10 +41,23 @@ export default function Login() {
     email: "",
     password: "",
   });
-  const [message,setMessage] = useState({text:"",onOpen:false,onClose:true})
-  const [loading,setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
+  const [disable ,setDisable] = useState(true)
   // Navigate
   const Navigate = useNavigate();
+
+  // button disable
+  useEffect(()=>{
+     const {email,password} = inputs
+if(email && password){
+  setDisable(false)
+}else{
+  setDisable(true)
+}
+  },[inputs])
+
+  // useing Hooks
+  const { PositionedSnackbar, showSnackbar } = usePositionedSnackbar();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -57,23 +69,27 @@ export default function Login() {
       if (!inputs.email.match(emailCheck)) {
         alert(`invalid email ${inputs.email}`);
         setLoading(false);
+        return;
       }
       const { data } = await axios.post("/api/v1/user/singin", {
         email: inputs.email,
         password: inputs.password,
       });
       setLoading(false);
-      setMessage({text:data.message,onOpen:true})
+      showSnackbar(data.message);
       if (data.success) {
         setLoading(false);
         localStorage.setItem("token", data.token);
         localStorage.setItem("id", data.id);
         Navigate("/Home");
+      } else {
+        setLoading(false);
+        showSnackbar(data.message);
       }
     } catch (error) {
       if (error) {
-        setMessage({text:error,onOpen:true})
         setLoading(false);
+        showSnackbar(error);
       }
     }
   };
@@ -85,22 +101,9 @@ export default function Login() {
       [name]: value,
     }));
   };
-const{onOpen} =  message
-const handleClose=()=>{
-  setMessage({...message,onOpen:false})
-}
   return (
     <ThemeProvider theme={defaultTheme}>
-      {/* <Snackbar
-        anchorOrigin={{ horizontal, vertical }}
-        open={open}
-        onClose={handleClose}
-        message={message}
-        key={vertical + horizontal}
-        autoHideDuration={2000}
-        TransitionComponent={TransitionBottom}
-      /> */}
-      <SnackBar onOpen={onOpen} handleClose={handleClose}>{message.text}</SnackBar>
+      <PositionedSnackbar />
       {loading ? <LinearProgress /> : ""}
       <Grid container component="main" sx={{ height: "100vh" }}>
         <CssBaseline />
@@ -127,7 +130,7 @@ const handleClose=()=>{
               mx: 4,
               display: "flex",
               flexDirection: "column",
-              alignItems: "center"
+              alignItems: "center",
             }}
           >
             <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
@@ -182,14 +185,15 @@ const handleClose=()=>{
                   fullWidth
                   variant="contained"
                   sx={{ mt: 3, mb: 2 }}
+                  disabled={disable}
                 >
-                  Sign In
+               Login
                 </Button>
               )}
 
               <Grid container>
                 <Grid item xs>
-                  <Link to={"/forget-Password"}  variant="body2">
+                  <Link to={"/forget-Password"} variant="body2" >
                     Forgot password?
                   </Link>
                 </Grid>

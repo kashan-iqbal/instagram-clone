@@ -1,10 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import Paper from "@mui/material/Paper";
-import { Box, CircularProgress, LinearProgress, Slide, Snackbar } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  LinearProgress,
+  Slide,
+  Snackbar,
+} from "@mui/material";
 import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
@@ -13,6 +19,7 @@ import image1 from "../../assets/image1.jpg";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import usePositionedSnackbar from "../../hooks/useSnackBarHook";
 
 function Copyright(props) {
   return (
@@ -42,34 +49,25 @@ export default function SingUp() {
     password: "",
     confirmPassword: "",
   });
+  const [disable, setDisable] = useState(true);
   const [loading, setLoading] = useState(false);
+
+  // button disable condition
+  useEffect(() => {
+    const { userName, email, password, confirmPassword } = input;
+    if (userName && email && password && confirmPassword) {
+      setDisable(false);
+    } else {
+      setDisable(true);
+    }
+  }, [input]);
   // for toast notification
-  const [snackBarStatus, setSnackBarStatus] = useState({
-    open: false,
-    vertical: "top",
-    horizontal: "center",
-    message: "",
-  });
-
-  const {open,vertical,horizontal, message} = snackBarStatus
-
-  const TransitionBottom=(props)=>{
-    return <Slide {...props} direction="up"/>
-     }
-     const handleClick = (newState) => {
-       setSnackBarStatus({ ...newState, open: true });
-     };
-     const handleClose = () => {
-       setSnackBarStatus({ ...snackBarStatus, open: false });
-     };
-
+  const { PositionedSnackbar, showSnackbar } = usePositionedSnackbar();
 
   // use Navigate
   const navigate = useNavigate();
 
   const submitHandler = async (e) => {
-    setLoading(true);
-
     e.preventDefault();
     // checking emial
     const emailCheck = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
@@ -83,6 +81,7 @@ export default function SingUp() {
       alert(`Password must contain at least one capital letter and one number`);
       return;
     }
+    setLoading(true);
     try {
       const { data } = await axios.post("/api/v1/user/", {
         userName: input.userName,
@@ -91,32 +90,17 @@ export default function SingUp() {
         confirmPassword: input.confirmPassword,
       });
       console.log(data);
-      setSnackBarStatus({
-        open: true,
-        vertical: "top",
-        horizontal: "center",
-        message: data.message
-      });
+      showSnackbar(data.message);
       setLoading(false);
       if (data.success) {
-        setSnackBarStatus({
-          open: true,
-          vertical: "top",
-          horizontal: "center",
-          message: `Register SuccessFul`
-        });
-        setTimeout(()=>{
+        showSnackbar(`Register SuccessFully`);
+        setTimeout(() => {
           navigate("/login");
-        },2000)
+        }, 2000);
       }
     } catch (error) {
       console.log(error, `i am error`);
-      setSnackBarStatus({
-        open: true,
-        vertical: "top",
-        horizontal: "center",
-        message: `some thing went wrong`
-      });
+      showSnackbar(`some thing went wrong`);
       setLoading(false);
     }
   };
@@ -130,15 +114,7 @@ export default function SingUp() {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Snackbar
-      open={open}
-      message={message}
-      anchorOrigin={{vertical,horizontal}}
-      autoHideDuration={2000}
-      key={vertical + horizontal}
-      onClose={handleClose}
-      TransitionComponent={TransitionBottom}
-      />
+      <PositionedSnackbar />
       {loading ? <LinearProgress variant="query" /> : ""}
       <Grid container component="main" sx={{ height: "100vh" }}>
         <CssBaseline />
@@ -237,6 +213,7 @@ export default function SingUp() {
                   type="submit"
                   fullWidth
                   variant="contained"
+                  disabled={disable}
                 >
                   Sign In
                 </Button>

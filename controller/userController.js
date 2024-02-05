@@ -39,12 +39,12 @@ const singin = async (req, res) => {
     console.log(email, password);
     const loginUser = await USER.findOne({ email: email });
     if (!loginUser) {
-      return res.send({ message: "not user found" });
+      return res.send({ message: "user with this email is not register" });
     }
     if (loginUser) {
       const result = await bcyrpt.compare(password, loginUser.password);
       if (!result) {
-        return res.send({ message: "result not found" });
+        return res.send({ message: "Wrong Password" });
       }
       if (result) {
         const token = jwt.sign(
@@ -58,7 +58,7 @@ const singin = async (req, res) => {
           process.env.ACCESS_TOKEN,
           { expiresIn: "1h" }
         );
-        return res.send({ success: true, token, id: loginUser._id });
+        return res.send({ success: true,message:"Login Successfully", token, id: loginUser._id });
       } else {
         res.send({ success: false, message: "incorrect password" });
       }

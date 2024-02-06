@@ -169,7 +169,7 @@ const uploadImage = async (req, res) => {
       },
       { new: true }
     );
-    res.status(201).send(user);
+    res.status(201).send({user,message:"image upload successful"});
   } catch (error) {
     res.send(error);
   }
@@ -187,7 +187,7 @@ const deleteImage = async (req, res) => {
     );
     const result = await Cloudnary.uploader.destroy(user.photoId);
     console.log(result);
-    res.send(user);
+    res.send({user,message:"Profile Image Deleted"});
   } catch (error) {
     res.send(error);
   }
@@ -207,11 +207,17 @@ const forget = async (req, res) => {
 
     const transporter =  nodemailer.createTransport({
       service: "gmail",
-      secure:false,
+      port:3000,
+      logger:true,
+      debug:true,
+      secure:true,
       auth: {
         user: "kashaniqbal33@gamil.com",
-        pass: "wsyowpafrmwasdkg",
+        pass: "ztqa vfnt outl umko",
       },
+      tls:{
+        rejectUnauthorized:true
+      }
     });
 
     const mailOptions = {

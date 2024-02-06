@@ -5,6 +5,7 @@ import axios from "axios";
 import PostDetail from "../detail post/DetailPost";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
+import usePositionedSnackbar from './../../hooks/useSnackBarHook';
 
 export default function Profie() {
   const [user, setUser] = useState("");
@@ -19,6 +20,11 @@ export default function Profie() {
   const show = false;
   // const posts = [];
   const changePic = false;
+
+  // use snack bar cusotm hook
+
+  const {PositionedSnackbar,showSnackbar} = usePositionedSnackbar()
+
 
   useEffect(() => {
     const gettingProfileData = async () => {
@@ -49,7 +55,6 @@ export default function Profie() {
     gettingUserPost();
   }, []);
 
-  // console.log(userPost,`iam `);
 
   const detailpost = (posts) => {
     setDetailPost(posts);
@@ -61,15 +66,17 @@ export default function Profie() {
       const data = new FormData();
       data.append("file", image);
 
-      const result = await axios.put(`/api/v1/user/upload-image`, data, {
+      const {result} = await axios.put(`/api/v1/user/upload-image`, data, {
         headers: {
           authorization: `Bearer ${localStorage.getItem("token")}`,
           "Content-Type": "multipart/form-data",
         },
       });
       console.log(result);
+      showSnackbar(result.data.message)
     } catch (error) {
       console.log(error);
+      showSnackbar(error)
     }
   };
 
@@ -84,13 +91,17 @@ export default function Profie() {
         },
       });
       console.log(result);
+      showSnackbar(result.data.message)
+      if(result.status === 200){
+    window.location.reload()
+      }
     } catch (error) {
       console.log(error);
+      showSnackbar(error)
     }
   };
   const handleChange = (e) => {
     setImage(e.target.files[0]);
-
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
@@ -106,6 +117,7 @@ export default function Profie() {
   return (
     <Layout>
       {modal && <PostDetail setModal={setModal} post={detailPost} />}
+      <PositionedSnackbar/>
       <div className="profile">
         {/* Profile frame */}
         <div className="profile-frame">
@@ -113,7 +125,7 @@ export default function Profie() {
           <div className="box">
             <div className="profile-pic">
               {/* <img src={user.photo ? user.photo : picLink} alt="" /> */}
-              <img ref={imageRef} src={user.photo ? user.photo : picLink } />
+              <img ref={imageRef} src={user.photo ? user.photo : picLink } alt="internet problem" />
             </div>
             <input
               type="file"
@@ -132,11 +144,6 @@ export default function Profie() {
               <div className="userName">
             <p >{user.userName}</p>
               </div>
-              <div style={{display:"flex" ,justifyContent:"space-around", maxWidth:"600px"}}>
-              <p>posts {userPost ? userPost.length : "0"} </p>
-              <p>followers {user.followers ? user.followers.length : "0"} </p>
-              <p>following {user.following ? user.following.length : "0"} </p>
-              </div>
             </div>
             {user.photo ? (
               <button onClick={deleteProfileImage}>delete profile Pic</button>
@@ -145,6 +152,11 @@ export default function Profie() {
             )}
           </div>
         </div>
+              <div className="profile_detail">
+              <p>Posts ({userPost ? userPost.length : "0"} ) </p>
+              <p>Followers ({user.followers ? user.followers.length : "0"}) </p>
+              <p>Following ({user.following ? user.following.length : "0"}) </p>
+              </div>
         <hr
           style={{
             width: "90%",
@@ -162,9 +174,9 @@ export default function Profie() {
           >
             {userPost &&
               userPost.map((pics) => (
-                <ImageListItem key={userPost._id}>
+                <ImageListItem key={pics._id}>
                   <img
-                    key={pics._id}
+                    // key={pics._id}
                     srcSet={`${pics.photo.image}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
                     src={`${pics.photo.image}?w=164&h=164&fit=crop&auto=format`}
                     alt="net porblem"

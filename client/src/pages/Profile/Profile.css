@@ -101,3 +101,12 @@
   .scrolbar::-webkit-scrollbar{
     display: none;
   }
+
+  .profile_detail{
+    display: flex;
+    justify-content: space-evenly;
+  }
+
+  .profile_detail p{
+    font-weight: 700;
+  }

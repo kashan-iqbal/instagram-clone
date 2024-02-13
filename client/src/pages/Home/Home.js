@@ -22,6 +22,7 @@ export default function Home() {
   const [commentDetai, setCommitDetail] = useState("");
   const [skip, setSkip] = useState(0);
   const [postLenght, setPostLenght] = useState("");
+  const [disable, setDisable] = useState(true);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -76,24 +77,33 @@ export default function Home() {
     }
   };
 
-  useEffect(() => {
-    getPosts();
-  }, [skip]);
-
   const getPosts = async () => {
     try {
-      const { data } = await axios.get(`api/v1/post/allposts?skip=${skip}`, {
-        headers: {
-          authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-      setPost((prev) => [...prev, ...data.allPost]);
-      setPostLenght(data.count);
+      const { data } = await axios.get(
+        `api/v1/post/allposts?skip=${skip === 0 ? 0 : skip * 10}`,
+        {
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      if (data.allPost && data.allPost.length) {
+        setPost((prev) => [...prev, ...data.allPost]);
+        setPostLenght(data.count);
+      }
       console.log(data);
     } catch (error) {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    getPosts();
+  }, [skip]);
+
+  useEffect(() => {
+    if (post.length === postLenght) setDisable(false);
+  }, [post]);
 
   const handleCommitSubmit = async (e, id) => {
     e.preventDefault();
@@ -144,15 +154,22 @@ export default function Home() {
     }
   };
 
-  console.log(commentDetai);
+  const formateDate = (timeStamps) => {
+    const newDate = new Date(timeStamps);
+
+    const formate = newDate.toLocaleDateString("en-US").replace(/\//g, "-");
+
+    return formate;
+  };
+
   return (
     <Layout>
       <div className="home">
         {/* card */}
         <InfiniteScroll
           dataLength={post.length}
-          next={() => setSkip(skip + 10)}
-          hasMore={true}
+          next={() => setSkip(skip + 1)}
+          hasMore={disable}
           loader={
             <CircularProgress
               color="primary"
@@ -178,7 +195,12 @@ export default function Home() {
                         alt=""
                       />
                     </div>
-                    <h5>{posts.postedBy.userName}</h5>
+                    <div className="scard-header-detail">
+                      <p>
+                        {posts.postedBy.userName} <br />{" "}
+                        {formateDate(posts.createdAt)}{" "}
+                      </p>
+                    </div>
                   </div>
                 </Link>
                 <hr />
@@ -272,11 +294,11 @@ export default function Home() {
                 </div>
                 <div>
                   <p>{commentDetai && commentDetai.postedBy?.userName}</p>
-                  <div>time</div>
+                  <div>{formateDate(commentDetai.createdAt)}</div>
                 </div>
               </div>
               <div>
-                <MoreVertIcon  />
+                <MoreVertIcon />
               </div>
             </div>
             <div className="post_body">
@@ -285,10 +307,9 @@ export default function Home() {
             <div className="post_img">
               <img
                 src={commentDetai.photo ? commentDetai.photo.image : picLink}
-                alt="other"
+                alt="images"
               />
             </div>
-
             <hr
               style={{
                 width: "100%",
@@ -298,7 +319,7 @@ export default function Home() {
             />
             <div className="like_section">
               <p>Likes {commentDetai.likes?.length} </p>
-              <p>commit 2332</p>
+              <p>commit {commentDetai?.comments?.length}</p>
             </div>
             <hr
               style={{

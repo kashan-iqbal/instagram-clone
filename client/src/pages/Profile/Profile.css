@@ -110,3 +110,27 @@
   .profile_detail p{
     font-weight: 700;
   }
+
+.post-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.post-container img{
+  max-width: 300px;
+  max-height: 120px;
+}
+
+
+
+
+
+
+
+
+
+
+
+

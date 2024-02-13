@@ -10,6 +10,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
+import linkStyle from "../../utils";
 
 function Copyright(props) {
   return (
@@ -20,7 +21,7 @@ function Copyright(props) {
       {...props}
     >
       {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
+      <Link color="inherit" href="https://mui.com/" style={linkStyle}>
         Your Website
       </Link>{" "}
       {new Date().getFullYear()}

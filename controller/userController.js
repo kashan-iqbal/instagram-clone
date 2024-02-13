@@ -58,7 +58,7 @@ const singin = async (req, res) => {
           process.env.ACCESS_TOKEN,
           { expiresIn: "1h" }
         );
-        return res.send({ success: true,message:"Login Successfully", token, id: loginUser._id });
+        return res.send({ success: true,message:"Login Successfully", token, id: loginUser._id ,userName:loginUser.userName });
       } else {
         res.send({ success: false, message: "incorrect password" });
       }

@@ -12,6 +12,7 @@ import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import "../Home/Home.css";
+import linkStyle from './../../utils';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -173,7 +174,7 @@ const handleunLike = async (id) => {
           post&&post.map((posts)=>(
             <div className="card" key={posts._id}>
             {/* card header */}
-            <Link to={`/userprofile/${posts.postedBy._id}`}>
+            <Link to={`/userprofile/${posts.postedBy._id}`}style={linkStyle} >
               <div className="card-header">
                 <div className="card-pic">
                   <img

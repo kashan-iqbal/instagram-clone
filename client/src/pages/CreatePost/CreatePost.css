@@ -1,55 +1,54 @@
-.createPost{
-    max-width: 500px;
-    max-height: 700px;
-    margin: 10px 8px;
-    border: 1px solid rgb(173, 173, 173);
-    border-radius: 5px;
+.createPost {
+  height: 80%;
+  width: fit-content;
+  margin: 10px 8px;
+  border: 1px solid rgb(173, 173, 173);
+  border-radius: 5px;
 }
 
-.main-div{
-    border-top: 1px solid rgb(173, 173, 173) ;
-    /* height: 80%;
+.main-div {
+  border-top: 1px solid rgb(173, 173, 173);
+  /* height: 80%;
     width: 60%; */
-    display: block;
-    align-items: center;
-    justify-content: center;
+  display: block;
+  align-items: center;
+  justify-content: center;
 }
 
-
-.post-header{
-    display: flex;
-    align-items: center;
-    height: 40px;
+.post-header {
+  display: flex;
+  align-items: center;
+  height: 40px;
 }
 
-#post-btn{
-    border: none;
-    color: #339ce3;
-    background:none;
-    font-weight: bolder;
-    cursor: pointer;
+#post-btn {
+  border: none;
+  color: #339ce3;
+  background: none;
+  font-weight: bolder;
+  cursor: pointer;
 }
-input{
-    border: none;
-    color: #339ce3;
-    background:none;
-    font-weight: bolder;
-    cursor: pointer;
+input {
+  border: none;
+  color: #339ce3;
+  background: none;
+  font-weight: bolder;
+  cursor: pointer;
 }
-.details{
-    border-top: 1px solid rgb(173, 173, 173) ;
-}
-
-textarea{
-    width: 90%;
-    border: none;
-    outline: none;
+.details {
+  border-top: 1px solid rgb(173, 173, 173);
 }
 
-#output{
-    width: 100%;
-    max-height: 300px;
-    border: none;
-    outline: none;
-    margin-top: 5px;
+textarea {
+  width: 90%;
+  border: none;
+  outline: none;
+}
+
+#output {
+  width: 100%;
+  height: 300px;
+  border: none;
+  outline: none;
+  margin-top: 5px;
 }

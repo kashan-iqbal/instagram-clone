@@ -8,8 +8,6 @@ import {
   Box,
   CircularProgress,
   LinearProgress,
-  Slide,
-  Snackbar,
 } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
@@ -20,6 +18,8 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import usePositionedSnackbar from "../../hooks/useSnackBarHook";
+import linkStyle from './../../utils';
+
 
 function Copyright(props) {
   return (
@@ -220,7 +220,7 @@ export default function SingUp() {
               )}
               <Grid container>
                 <Grid item>
-                  <Link to={"/login"}>{"you have an account?login"}</Link>
+                  <Link to={"/login"} style={linkStyle}>{"you have an account?login"}</Link>
                   {/* <Link href="#" variant="body2">
                   </Link> */}
                 </Grid>

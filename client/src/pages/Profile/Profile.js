@@ -3,9 +3,7 @@ import "./Profile.css";
 import Layout from "../../component/Layout";
 import axios from "axios";
 import PostDetail from "../detail post/DetailPost";
-import ImageList from "@mui/material/ImageList";
-import ImageListItem from "@mui/material/ImageListItem";
-import usePositionedSnackbar from './../../hooks/useSnackBarHook';
+import usePositionedSnackbar from "./../../hooks/useSnackBarHook";
 
 export default function Profie() {
   const [user, setUser] = useState("");
@@ -23,8 +21,7 @@ export default function Profie() {
 
   // use snack bar cusotm hook
 
-  const {PositionedSnackbar,showSnackbar} = usePositionedSnackbar()
-
+  const { PositionedSnackbar, showSnackbar } = usePositionedSnackbar();
 
   useEffect(() => {
     const gettingProfileData = async () => {
@@ -55,7 +52,6 @@ export default function Profie() {
     gettingUserPost();
   }, []);
 
-
   const detailpost = (posts) => {
     setDetailPost(posts);
     setModal((prev) => !prev);
@@ -66,17 +62,17 @@ export default function Profie() {
       const data = new FormData();
       data.append("file", image);
 
-      const {result} = await axios.put(`/api/v1/user/upload-image`, data, {
+      const { result } = await axios.put(`/api/v1/user/upload-image`, data, {
         headers: {
           authorization: `Bearer ${localStorage.getItem("token")}`,
           "Content-Type": "multipart/form-data",
         },
       });
       console.log(result);
-      showSnackbar(result.data.message)
+      showSnackbar(result.data.message);
     } catch (error) {
       console.log(error);
-      showSnackbar(error)
+      showSnackbar(error);
     }
   };
 
@@ -91,13 +87,13 @@ export default function Profie() {
         },
       });
       console.log(result);
-      showSnackbar(result.data.message)
-      if(result.status === 200){
-    window.location.reload()
+      showSnackbar(result.data.message);
+      if (result.status === 200) {
+        window.location.reload();
       }
     } catch (error) {
       console.log(error);
-      showSnackbar(error)
+      showSnackbar(error);
     }
   };
   const handleChange = (e) => {
@@ -113,11 +109,12 @@ export default function Profie() {
       reader.readAsDataURL(file);
     }
   };
-
+  console.log(user);
+  
   return (
     <Layout>
-      {modal && <PostDetail setModal={setModal} post={detailPost} />}
-      <PositionedSnackbar/>
+      {modal && <PostDetail modal={modal} setModal={setModal} post={detailPost} />}
+      <PositionedSnackbar />
       <div className="profile">
         {/* Profile frame */}
         <div className="profile-frame">
@@ -125,7 +122,11 @@ export default function Profie() {
           <div className="box">
             <div className="profile-pic">
               {/* <img src={user.photo ? user.photo : picLink} alt="" /> */}
-              <img ref={imageRef} src={user.photo ? user.photo : picLink } alt="internet problem" />
+              <img
+                ref={imageRef}
+                src={user.photo ? user.photo : picLink}
+                alt="internet problem"
+              />
             </div>
             <input
               type="file"
@@ -142,7 +143,7 @@ export default function Profie() {
           <div className="pofile-data">
             <div className="profile-info" style={{ display: "block" }}>
               <div className="userName">
-            <p >{user.userName}</p>
+                <p>{user.userName}</p>
               </div>
             </div>
             {user.photo ? (
@@ -152,11 +153,11 @@ export default function Profie() {
             )}
           </div>
         </div>
-              <div className="profile_detail">
-              <p>Posts ({userPost ? userPost.length : "0"} ) </p>
-              <p>Followers ({user.followers ? user.followers.length : "0"}) </p>
-              <p>Following ({user.following ? user.following.length : "0"}) </p>
-              </div>
+        <div className="profile_detail">
+          <p>Posts ({userPost ? userPost.length : "0"} ) </p>
+          <p>Followers ({user.followers ? user.followers.length : "0"}) </p>
+          <p>Following ({user.following ? user.following.length : "0"}) </p>
+        </div>
         <hr
           style={{
             width: "90%",
@@ -166,26 +167,23 @@ export default function Profie() {
         />
         {/* Gallery */}
         <div className="gallery">
-          <ImageList
+          <div
             sx={{ width: 600, height: 450 }}
             cols={3}
             rowHeight={164}
-            className="scrolbar"
+            className="post-container"
           >
             {userPost &&
               userPost.map((pics) => (
-                <ImageListItem key={pics._id}>
                   <img
-                    // key={pics._id}
-                    srcSet={`${pics.photo.image}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-                    src={`${pics.photo.image}?w=164&h=164&fit=crop&auto=format`}
+                    key={pics._id}
+                    srcSet={pics.photo.image}
+                    src={pics.photo.image}
                     alt="net porblem"
-                    loading="lazy"
                     onClick={() => detailpost(pics)}
                   />
-                </ImageListItem>
               ))}
-          </ImageList>
+          </div>
         </div>
         {show && <div>{/* Render post details UI */}</div>}
         {changePic && <div>{/* Render profile picture change UI */}</div>}

@@ -57,10 +57,13 @@ function ResponsiveAppBar() {
     setOpen((prev) => !prev);
   };
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    localStorage.clear()
     Navigate("/login");
     handleClose();
   };
+
+  const name = localStorage.getItem("name").charAt(0)
+  console.log(name)
 
   return (
     <>
@@ -169,7 +172,7 @@ function ResponsiveAppBar() {
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                  <Avatar alt={name.toLocaleUpperCase()} src="/static/images/avatar/2.jpg" />
                 </IconButton>
               </Tooltip>
               <Menu

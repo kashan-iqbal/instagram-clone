@@ -14,6 +14,8 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { CircularProgress, LinearProgress } from "@mui/material";
 import usePositionedSnackbar from "../../hooks/useSnackBarHook";
+import linkStyle from './../../utils';
+
 
 function Copyright(props) {
   return (
@@ -24,7 +26,7 @@ function Copyright(props) {
       {...props}
     >
       {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
+      <Link color="inherit" href="https://mui.com/"style={linkStyle}>
         Your Website
       </Link>{" "}
       {new Date().getFullYear()}
@@ -42,19 +44,19 @@ export default function Login() {
     password: "",
   });
   const [loading, setLoading] = useState(false);
-  const [disable ,setDisable] = useState(true)
+  const [disable, setDisable] = useState(true);
   // Navigate
   const Navigate = useNavigate();
 
   // button disable
-  useEffect(()=>{
-     const {email,password} = inputs
-if(email && password){
-  setDisable(false)
-}else{
-  setDisable(true)
-}
-  },[inputs])
+  useEffect(() => {
+    const { email, password } = inputs;
+    if (email && password) {
+      setDisable(false);
+    } else {
+      setDisable(true);
+    }
+  }, [inputs]);
 
   // useing Hooks
   const { PositionedSnackbar, showSnackbar } = usePositionedSnackbar();
@@ -81,6 +83,7 @@ if(email && password){
         setLoading(false);
         localStorage.setItem("token", data.token);
         localStorage.setItem("id", data.id);
+        localStorage.setItem("name", data.userName);
         Navigate("/Home");
       } else {
         setLoading(false);
@@ -187,18 +190,18 @@ if(email && password){
                   sx={{ mt: 3, mb: 2 }}
                   disabled={disable}
                 >
-               Login
+                  Login
                 </Button>
               )}
 
               <Grid container>
                 <Grid item xs>
-                  <Link to={"/forget-Password"} variant="body2" >
+                  <Link to={"/forget-Password"} variant="body2" style={linkStyle} >
                     Forgot password?
                   </Link>
                 </Grid>
                 <Grid item>
-                  <Link to={"/"}>{"Don't have an account? Sign Up"}</Link>
+                  <Link to={"/"} style={linkStyle}>{"Don't have an account? Sign Up"}</Link>
                 </Grid>
               </Grid>
               <Copyright sx={{ mt: 5 }} />

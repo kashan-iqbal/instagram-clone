@@ -177,8 +177,7 @@ export default function Profie() {
               userPost.map((pics) => (
                   <img
                     key={pics._id}
-                    srcSet={pics.photo.image}
-                    src={pics.photo.image}
+                    src={pics?.photo?.image}
                     alt="net porblem"
                     onClick={() => detailpost(pics)}
                   />
